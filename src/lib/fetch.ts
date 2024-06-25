@@ -1,7 +1,6 @@
-import { Genre, MovieDetail, Movies } from '../global/types';
+import { Genre, MovieDetail, Movies } from '../global/types'
 
 async function fetchTMDB<T>(path: string, method = 'GET') {
-  console.log(`${process.env.EXPO_PUBLIC_TMDB_API_BASE_URL}${path}`)
   return fetch(`${process.env.EXPO_PUBLIC_TMDB_API_BASE_URL}${path}`, {
     method: method,
     headers: {
@@ -61,4 +60,3 @@ export {
   fetchMoviesByTitle, fetchNowPlayingMovies, fetchPopularMovies, fetchTopRatedMovies,
   fetchUpcomingMovies
 };
-

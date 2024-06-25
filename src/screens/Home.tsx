@@ -1,7 +1,11 @@
+import { ParamListBase } from '@react-navigation/native'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 
-export default function Home(): React.ReactElement {
+export default function Home({
+  navigation,
+}: NativeStackScreenProps<ParamListBase>): React.ReactElement {
   return (
     <View
       style={{
@@ -19,6 +23,25 @@ export default function Home(): React.ReactElement {
       >
         HOME!!
       </Text>
+      <Pressable
+        style={({ pressed }) => ({
+          backgroundColor: pressed ? 'violet' : 'pink',
+          width: 200,
+          paddingVertical: 10,
+          borderRadius: 10,
+        })}
+        onPress={() => {
+          navigation.navigate('Detail')
+        }}
+      >
+        <Text
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          To Detail!
+        </Text>
+      </Pressable>
     </View>
   )
 }

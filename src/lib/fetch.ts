@@ -1,4 +1,4 @@
-import { Genre, MovieDetail, Movies } from '../global/types'
+import { Genre, MovieDetail, Movies } from '../global/types';
 
 async function fetchTMDB<T>(path: string, method = 'GET') {
   console.log(`${process.env.EXPO_PUBLIC_TMDB_API_BASE_URL}${path}`)
@@ -42,10 +42,23 @@ const fetchMoviesByTitle = async (title: string): Promise<Movies> => {
   )
 }
 
+const fetchNowPlayingMovies = async (page: number): Promise<Movies> => {
+  return fetchTMDB(`/movie/now_playing?page=${page}`)
+}
+
+const fetchTopRatedMovies = async (page: number): Promise<Movies> => {
+  return fetchTMDB(`/movie/top_rated?page=${page}`)
+}
+
+const fetchUpcomingMovies = async (page: number): Promise<Movies> => {
+  return fetchTMDB(`/movie/upcoming?page=${page}`)
+}
+
 export {
   fetchAvailableMovieGenres,
   fetchMovieDetail,
   fetchMoviesByGenre,
-  fetchMoviesByTitle,
-  fetchPopularMovies,
-}
+  fetchMoviesByTitle, fetchNowPlayingMovies, fetchPopularMovies, fetchTopRatedMovies,
+  fetchUpcomingMovies
+};
+

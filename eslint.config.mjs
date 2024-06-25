@@ -22,7 +22,14 @@ export default [
       },
     },
   },
-  { languageOptions: { globals: globals.browser } },
+  {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+  },
   pluginJs.configs.recommended,
   eslintConfigPrettier,
   ...tseslint.configs.strict,

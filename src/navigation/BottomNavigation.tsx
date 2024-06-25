@@ -1,4 +1,4 @@
-import { AntDesign, Feather, FontAwesome } from '@expo/vector-icons'
+import { FontAwesome } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import React from 'react'
 import Favorites from '../screens/Favorites'
@@ -18,7 +18,7 @@ export default function BottomNavigation(): React.ReactElement {
         component={HomeNavigation}
         options={{
           tabBarIcon: ({ color }) => {
-            return <Feather name="home" size={28} color={color} />
+            return <FontAwesome name="home" size={28} color={color} />
           },
           tabBarLabel: 'Home',
         }}
@@ -37,7 +37,7 @@ export default function BottomNavigation(): React.ReactElement {
         component={Favorites}
         options={{
           tabBarIcon: ({ color }) => {
-            return <AntDesign name="star" size={28} color={color} />
+            return <FontAwesome name="star" size={28} color={color} />
           },
         }}
       />

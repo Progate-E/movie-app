@@ -28,6 +28,7 @@ export default function MovieCard(props: MovieCardProps): React.ReactElement {
         if (props.unPressable) return
         navigation.dispatch(
           StackActions.push('Detail', {
+            title: props.title,
             id: props.id,
           }),
         )

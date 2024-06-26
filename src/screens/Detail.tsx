@@ -50,7 +50,10 @@ export default function Detail({
               paddingHorizontal: 10,
             }}
           >
-            <Text variant="bodyMedium">{movie.overview}</Text>
+            <Text variant="bodyMedium">
+              {movie.overview ||
+                "We don't have any overview information for this movie yet."}
+            </Text>
             <Divider
               style={{
                 marginVertical: 5,
@@ -112,7 +115,7 @@ export default function Detail({
                 Rating:{' '}
               </Text>
               <Text variant="bodyMedium">
-                {`${movie.vote_average.toPrecision(2)} (${movie.vote_count} votes)`}
+                {`${movie.vote_average.toPrecision(2)} (${movie.vote_count} ${movie.vote_count > 1 ? 'votes' : 'vote'})`}
               </Text>
             </View>
           </View>

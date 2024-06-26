@@ -50,20 +50,34 @@ export default function MovieList(props: MovieListProps): React.ReactElement {
             flexDirection: 'row-reverse',
           }}
           onPress={props.onSeeMore}
+          disabled={!movies.results || movies.results.length === 0}
           compact
         >
           See more
         </Button>
       </View>
-      <FlatList
-        data={movies.results}
-        renderItem={({ item }) => (
-          <MovieCard landscape={props.landscape} {...item} />
-        )}
-        keyExtractor={(item) => item.id.toString()}
-        showsHorizontalScrollIndicator={false}
-        horizontal
-      />
+      {movies.results &&
+        (movies.results.length > 0 ? (
+          <FlatList
+            data={movies.results}
+            renderItem={({ item }) => (
+              <MovieCard landscape={props.landscape} {...item} />
+            )}
+            keyExtractor={(item) => item.id.toString()}
+            showsHorizontalScrollIndicator={false}
+            horizontal
+          />
+        ) : (
+          <Text
+            variant="displayMedium"
+            style={{
+              textAlign: 'center',
+              fontWeight: '900',
+            }}
+          >
+            No movies found
+          </Text>
+        ))}
     </View>
   )
 }

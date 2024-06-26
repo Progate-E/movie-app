@@ -1,18 +1,20 @@
 import React from 'react'
 import { ScrollView, Text } from 'react-native'
-import styles from '../util/styles'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function Favorites(): React.ReactElement {
   return (
-    <ScrollView style={styles.NotchHelper}>
-      <Text
-        style={{
-          fontSize: 50,
-          fontWeight: '900',
-        }}
-      >
-        Favorites!!
-      </Text>
-    </ScrollView>
+    <SafeAreaView>
+      <ScrollView>
+        <Text
+          style={{
+            fontSize: 50,
+            fontWeight: '900',
+          }}
+        >
+          Favorites!!
+        </Text>
+      </ScrollView>
+    </SafeAreaView>
   )
 }

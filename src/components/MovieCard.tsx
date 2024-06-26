@@ -13,6 +13,7 @@ interface MovieCardProps {
   overview: string
   release_date: string
   backdrop_path: string
+  status?: string
   landscape?: boolean
   width?: DimensionValue
   height?: DimensionValue
@@ -62,7 +63,10 @@ export default function MovieCard(props: MovieCardProps): React.ReactElement {
               </Text>
             </View>
             <Text style={styles.releaseYear}>
-              {new Date(props.release_date).getFullYear()}
+              {(props.release_date &&
+                new Date(props.release_date).getFullYear()) ||
+                props.status ||
+                'Unknown'}
             </Text>
           </Card.Content>
         </View>

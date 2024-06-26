@@ -61,11 +61,14 @@ export default function Detail({
                 Release Date:{' '}
               </Text>
               <Text variant="bodyMedium">
-                {new Date(movie.release_date).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
+                {(movie.release_date &&
+                  new Date(movie.release_date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })) ||
+                  movie.status ||
+                  'Unknown'}
               </Text>
             </View>
             <View style={styles.inlineData}>

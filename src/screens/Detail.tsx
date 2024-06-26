@@ -21,13 +21,13 @@ export default function Detail({
 }: NativeStackScreenProps<ParamListBase>): React.ReactElement {
   const navigation = useNavigation()
   const [movie, setMovie] = useState<MovieDetail>({} as MovieDetail)
-  const [loading, setLoading] = useState<boolean>(true)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const { id } = route.params as DetailProps
   useEffect(() => {
     fetchMovieDetail(id)
       .then((data) => {
         setMovie(data)
-        setLoading(false)
+        setIsLoading(false)
       })
       .catch((e) => {
         console.error(e)
@@ -39,7 +39,7 @@ export default function Detail({
         width: '100%',
       }}
     >
-      {loading ? (
+      {isLoading ? (
         <ActivityIndicator size="large" />
       ) : (
         <ScrollView>

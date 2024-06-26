@@ -1,6 +1,6 @@
 import { Skeleton } from '@rneui/themed'
 import React, { useEffect, useState } from 'react'
-import { FlatList, View } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 import { Button, Text } from 'react-native-paper'
 import { Movies } from '../global/types'
 import MovieCard from './MovieCard'
@@ -27,47 +27,18 @@ export default function MovieList(props: MovieListProps): React.ReactElement {
       })
   }, [])
   return (
-    <View
-      style={{
-        paddingHorizontal: 5,
-      }}
-    >
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        }}
-      >
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'flex-start',
-          }}
-        >
-          <View
-            style={{
-              width: 20,
-              height: 40,
-              borderRadius: 20,
-              backgroundColor: '#3495ff',
-              marginRight: 12,
-            }}
-          ></View>
-          <Text
-            variant="headlineMedium"
-            style={{
-              fontWeight: '900',
-            }}
-          >
+    <View style={styles.container}>
+      <View style={styles.listHeader}>
+        <View style={styles.listLabel}>
+          <View style={styles.thatThingOnTheLeft}></View>
+          <Text variant="headlineMedium" style={styles.fontExtraBold}>
             {props.title}
           </Text>
         </View>
         <Button
           icon="chevron-right"
           textColor="#007AFF"
-          contentStyle={{
-            flexDirection: 'row-reverse',
-          }}
+          contentStyle={styles.seeMore}
           onPress={props.onSeeMore}
           disabled={!movies.results || movies.results.length === 0}
           compact
@@ -90,18 +61,10 @@ export default function MovieList(props: MovieListProps): React.ReactElement {
             horizontal
           />
         ) : (
-          <View
-            style={{
-              height: 200,
-              justifyContent: 'center',
-            }}
-          >
+          <View style={styles.notFoundContainer}>
             <Text
               variant="headlineMedium"
-              style={{
-                textAlign: 'center',
-                fontWeight: '900',
-              }}
+              style={[styles.textCenter, styles.fontExtraBold]}
             >
               No movies found
             </Text>
@@ -111,3 +74,37 @@ export default function MovieList(props: MovieListProps): React.ReactElement {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 5,
+  },
+  listHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  listLabel: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  thatThingOnTheLeft: {
+    width: 20,
+    height: '100%',
+    borderRadius: 20,
+    backgroundColor: '#3495ff',
+    marginRight: 12,
+  },
+  fontExtraBold: {
+    fontWeight: '900',
+  },
+  seeMore: {
+    flexDirection: 'row-reverse',
+  },
+  notFoundContainer: {
+    height: 200,
+    justifyContent: 'center',
+  },
+  textCenter: {
+    textAlign: 'center',
+  },
+})

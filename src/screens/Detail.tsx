@@ -5,8 +5,8 @@ import {
 } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
-import { ScrollView, View } from 'react-native'
-import { ActivityIndicator, Divider, Text } from 'react-native-paper'
+import { ScrollView, StyleSheet, View } from 'react-native'
+import { ActivityIndicator, Text } from 'react-native-paper'
 import MovieCard from '../components/MovieCard'
 import MovieList from '../components/MovieList'
 import { MovieDetail } from '../global/types'
@@ -34,11 +34,7 @@ export default function Detail({
       })
   }, [])
   return (
-    <View
-      style={{
-        width: '100%',
-      }}
-    >
+    <View style={styles.container}>
       {isLoading ? (
         <ActivityIndicator size="large" />
       ) : (
@@ -50,25 +46,12 @@ export default function Detail({
             unPressable
             {...movie}
           />
-          <View
-            style={{
-              paddingHorizontal: 10,
-            }}
-          >
-            <Text variant="bodyMedium">
+          <View style={[styles.ph10, styles.mb5]}>
+            <Text variant="bodyMedium" style={[styles.mb5, styles.textJustify]}>
               {movie.overview ||
                 "We don't have any overview information for this movie yet."}
             </Text>
-            <Divider
-              style={{
-                marginVertical: 5,
-              }}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-              }}
-            >
+            <View style={styles.inlineData}>
               <Text
                 variant="labelLarge"
                 style={{
@@ -85,17 +68,8 @@ export default function Detail({
                 })}
               </Text>
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-              }}
-            >
-              <Text
-                variant="labelLarge"
-                style={{
-                  fontWeight: '900',
-                }}
-              >
+            <View style={styles.inlineData}>
+              <Text variant="labelLarge" style={styles.fontExtraBold}>
                 {movie.spoken_languages.length > 1
                   ? 'Languages: '
                   : 'Language: '}
@@ -106,17 +80,8 @@ export default function Detail({
                   .join(', ')}
               </Text>
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-              }}
-            >
-              <Text
-                variant="labelLarge"
-                style={{
-                  fontWeight: '900',
-                }}
-              >
+            <View style={styles.inlineData}>
+              <Text variant="labelLarge" style={styles.fontExtraBold}>
                 Rating:{' '}
               </Text>
               <Text variant="bodyMedium">
@@ -142,3 +107,25 @@ export default function Detail({
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+  },
+  mb5: {
+    marginBottom: 5,
+  },
+  ph10: {
+    paddingHorizontal: 10,
+  },
+  inlineData: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  fontExtraBold: {
+    fontWeight: '900',
+  },
+  textJustify: {
+    textAlign: 'justify',
+  },
+})

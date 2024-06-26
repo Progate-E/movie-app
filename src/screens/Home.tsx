@@ -17,7 +17,7 @@ export default function Home(): React.ReactElement {
     <SafeAreaView>
       <ScrollView>
         <MovieList
-          title="Now Playing"
+          title="Currently In Theaters"
           fetchFunc={async () => fetchNowPlayingMovies(1)}
           onSeeMore={() => {
             navigation.dispatch(
@@ -30,7 +30,7 @@ export default function Home(): React.ReactElement {
           landscape
         />
         <MovieList
-          title="Upcoming"
+          title="Upcoming Movies"
           fetchFunc={async () => fetchUpcomingMovies(1)}
           onSeeMore={() => {
             navigation.dispatch(
@@ -42,7 +42,7 @@ export default function Home(): React.ReactElement {
           }}
         />
         <MovieList
-          title="Top Rated"
+          title="Top Rated Movies"
           fetchFunc={async () => fetchTopRatedMovies(1)}
           onSeeMore={() => {
             navigation.dispatch(
@@ -54,7 +54,7 @@ export default function Home(): React.ReactElement {
           }}
         />
         <MovieList
-          title="Popular"
+          title="Popular Movies"
           fetchFunc={async () => fetchPopularMovies(1)}
           onSeeMore={() => {
             navigation.dispatch(

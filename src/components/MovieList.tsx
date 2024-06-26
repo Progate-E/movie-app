@@ -1,3 +1,4 @@
+import { Skeleton } from '@rneui/themed'
 import React, { useEffect, useState } from 'react'
 import { FlatList, View } from 'react-native'
 import { Button, Text } from 'react-native-paper'
@@ -13,11 +14,13 @@ interface MovieListProps {
 
 export default function MovieList(props: MovieListProps): React.ReactElement {
   const [movies, setMovies] = useState<Movies>({} as Movies)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   useEffect(() => {
     props
       .fetchFunc()
       .then((data) => {
         setMovies(data)
+        setIsLoading(false)
       })
       .catch((e) => {
         console.error(e)
@@ -35,14 +38,30 @@ export default function MovieList(props: MovieListProps): React.ReactElement {
           justifyContent: 'space-between',
         }}
       >
-        <Text
-          variant="headlineMedium"
+        <View
           style={{
-            fontWeight: '900',
+            flexDirection: 'row',
+            alignItems: 'flex-start',
           }}
         >
-          {props.title}
-        </Text>
+          <View
+            style={{
+              width: 20,
+              height: 40,
+              borderRadius: 20,
+              backgroundColor: '#3495ff',
+              marginRight: 12,
+            }}
+          ></View>
+          <Text
+            variant="headlineMedium"
+            style={{
+              fontWeight: '900',
+            }}
+          >
+            {props.title}
+          </Text>
+        </View>
         <Button
           icon="chevron-right"
           textColor="#007AFF"
@@ -56,7 +75,10 @@ export default function MovieList(props: MovieListProps): React.ReactElement {
           See more
         </Button>
       </View>
-      {movies.results &&
+      {isLoading ? (
+        <Skeleton width="100%" height={200} animation="wave" />
+      ) : (
+        movies.results &&
         (movies.results.length > 0 ? (
           <FlatList
             data={movies.results}
@@ -68,16 +90,24 @@ export default function MovieList(props: MovieListProps): React.ReactElement {
             horizontal
           />
         ) : (
-          <Text
-            variant="displayMedium"
+          <View
             style={{
-              textAlign: 'center',
-              fontWeight: '900',
+              height: 200,
+              justifyContent: 'center',
             }}
           >
-            No movies found
-          </Text>
-        ))}
+            <Text
+              variant="headlineMedium"
+              style={{
+                textAlign: 'center',
+                fontWeight: '900',
+              }}
+            >
+              No movies found
+            </Text>
+          </View>
+        ))
+      )}
     </View>
   )
 }

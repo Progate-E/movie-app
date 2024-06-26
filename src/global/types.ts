@@ -78,4 +78,4 @@ interface MovieParams {
   genre?: number[] | number
 }
 
-export { Genre, MovieDetail, MovieParams, Movies }
+export { Genre, Movie, MovieDetail, MovieParams, Movies }

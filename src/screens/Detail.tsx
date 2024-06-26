@@ -1,4 +1,8 @@
-import { ParamListBase } from '@react-navigation/native'
+import {
+  ParamListBase,
+  StackActions,
+  useNavigation,
+} from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
 import { ScrollView, View } from 'react-native'
@@ -15,14 +19,15 @@ interface DetailProps {
 export default function Detail({
   route,
 }: NativeStackScreenProps<ParamListBase>): React.ReactElement {
+  const navigation = useNavigation()
   const [movie, setMovie] = useState<MovieDetail>({} as MovieDetail)
-  const [loading, setLoading] = useState<boolean>(true)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const { id } = route.params as DetailProps
   useEffect(() => {
     fetchMovieDetail(id)
       .then((data) => {
         setMovie(data)
-        setLoading(false)
+        setIsLoading(false)
       })
       .catch((e) => {
         console.error(e)
@@ -34,8 +39,8 @@ export default function Detail({
         width: '100%',
       }}
     >
-      {loading ? (
-        <ActivityIndicator animating={true} size="large" />
+      {isLoading ? (
+        <ActivityIndicator size="large" />
       ) : (
         <ScrollView>
           <MovieCard
@@ -123,7 +128,13 @@ export default function Detail({
             title="You may also like"
             fetchFunc={async () => fetchRecommendedMovies(movie.id)}
             onSeeMore={() => {
-              console.log('See More')
+              navigation.dispatch(
+                StackActions.push('AllMovies', {
+                  title: 'Recommended Movies',
+                  fetchType: 'recommended',
+                  movieId: movie.id,
+                }),
+              )
             }}
           />
         </ScrollView>

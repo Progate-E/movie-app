@@ -53,8 +53,11 @@ const fetchUpcomingMovies = async (page: number): Promise<Movies> => {
   return fetchTMDB(`/movie/upcoming?page=${page}`)
 }
 
-const fetchRecommendedMovies = async (movie_id: number): Promise<Movies> => {
-  return fetchTMDB(`/movie/${movie_id}/recommendations`)
+const fetchRecommendedMovies = async (
+  movie_id: number,
+  page = 1,
+): Promise<Movies> => {
+  return fetchTMDB(`/movie/${movie_id}/recommendations?page=${page}`)
 }
 
 export {

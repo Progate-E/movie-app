@@ -1,16 +1,10 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { ScrollView, Text } from 'react-native'
+import styles from '../util/styles'
 
 export default function Search(): React.ReactElement {
   return (
-    <View
-      style={{
-        display: 'flex',
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
+    <ScrollView style={styles.NotchHelper}>
       <Text
         style={{
           fontSize: 50,
@@ -19,6 +13,6 @@ export default function Search(): React.ReactElement {
       >
         Search!!
       </Text>
-    </View>
+    </ScrollView>
   )
 }

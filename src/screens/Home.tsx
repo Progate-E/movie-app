@@ -1,47 +1,46 @@
-import { ParamListBase } from '@react-navigation/native'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React from 'react'
-import { Pressable, Text, View } from 'react-native'
+import { ScrollView } from 'react-native'
+import MovieList from '../components/MovieList'
+import {
+  fetchNowPlayingMovies,
+  fetchPopularMovies,
+  fetchTopRatedMovies,
+  fetchUpcomingMovies,
+} from '../lib/fetch'
+import styles from '../util/styles'
 
-export default function Home({
-  navigation,
-}: NativeStackScreenProps<ParamListBase>): React.ReactElement {
+export default function Home(): React.ReactElement {
   return (
-    <View
-      style={{
-        display: 'flex',
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Text
-        style={{
-          fontSize: 50,
-          fontWeight: '900',
+    <ScrollView style={styles.NotchHelper}>
+      <MovieList
+        title="Now Playing"
+        fetchFunc={async () => fetchNowPlayingMovies(1)}
+        onSeeMore={() => {
+          console.log('See more')
         }}
-      >
-        HOME!!
-      </Text>
-      <Pressable
-        style={({ pressed }) => ({
-          backgroundColor: pressed ? 'violet' : 'pink',
-          width: 200,
-          paddingVertical: 10,
-          borderRadius: 10,
-        })}
-        onPress={() => {
-          navigation.navigate('Detail')
+        landscape
+      />
+      <MovieList
+        title="Upcoming"
+        fetchFunc={async () => fetchUpcomingMovies(1)}
+        onSeeMore={() => {
+          console.log('See more')
         }}
-      >
-        <Text
-          style={{
-            textAlign: 'center',
-          }}
-        >
-          To Detail!
-        </Text>
-      </Pressable>
-    </View>
+      />
+      <MovieList
+        title="Top Rated"
+        fetchFunc={async () => fetchTopRatedMovies(1)}
+        onSeeMore={() => {
+          console.log('See more')
+        }}
+      />
+      <MovieList
+        title="Popular"
+        fetchFunc={async () => fetchPopularMovies(1)}
+        onSeeMore={() => {
+          console.log('See more')
+        }}
+      />
+    </ScrollView>
   )
 }

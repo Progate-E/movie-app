@@ -1,3 +1,4 @@
+import { StackActions, useNavigation } from '@react-navigation/native'
 import { Skeleton } from '@rneui/themed'
 import React, { useEffect, useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
@@ -15,6 +16,7 @@ interface MovieListProps {
 export default function MovieList(props: MovieListProps): React.ReactElement {
   const [movies, setMovies] = useState<Movies>({} as Movies)
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const navigation = useNavigation()
   useEffect(() => {
     props
       .fetchFunc()
@@ -54,7 +56,18 @@ export default function MovieList(props: MovieListProps): React.ReactElement {
           <FlatList
             data={movies.results}
             renderItem={({ item }) => (
-              <MovieCard landscape={props.landscape} {...item} />
+              <MovieCard
+                landscape={props.landscape}
+                {...item}
+                onPress={() => {
+                  navigation.dispatch(
+                    StackActions.push('Detail', {
+                      id: item.id,
+                      title: item.title,
+                    }),
+                  )
+                }}
+              />
             )}
             keyExtractor={(item) => item.id.toString()}
             showsHorizontalScrollIndicator={false}

@@ -39,7 +39,7 @@ export default function MovieBanner(props: MovieHeaderProps): ReactElement {
         >
           <View style={styles.contentContainer}>
             <View>
-              <Text variant="titleLarge" style={styles.title}>
+              <Text variant="titleLarge" style={styles.title} numberOfLines={1}>
                 {props.title}
               </Text>
               <View style={styles.rating}>

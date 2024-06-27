@@ -17,7 +17,6 @@ interface MovieCardProps {
   landscape?: boolean
   width?: DimensionValue
   height?: DimensionValue
-  unPressable?: boolean
 }
 
 export default function MovieCard(props: MovieCardProps): React.ReactElement {
@@ -26,7 +25,6 @@ export default function MovieCard(props: MovieCardProps): React.ReactElement {
   return (
     <Card
       onPress={() => {
-        if (props.unPressable) return
         navigation.dispatch(
           StackActions.push('Detail', {
             title: props.title,

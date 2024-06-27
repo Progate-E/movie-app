@@ -7,7 +7,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { ActivityIndicator, Text } from 'react-native-paper'
-import MovieCard from '../components/MovieCard'
+import MovieBanner from '../components/MovieBanner'
 import MovieList from '../components/MovieList'
 import { MovieDetail } from '../global/types'
 import { fetchMovieDetail, fetchRecommendedMovies } from '../lib/fetch'
@@ -23,6 +23,7 @@ export default function Detail({
   const [movie, setMovie] = useState<MovieDetail>({} as MovieDetail)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const { id } = route.params as DetailProps
+  const [isFavorite, setIsFavorite] = useState<boolean>(false)
   useEffect(() => {
     fetchMovieDetail(id)
       .then((data) => {
@@ -39,11 +40,11 @@ export default function Detail({
         <ActivityIndicator size="large" />
       ) : (
         <ScrollView>
-          <MovieCard
-            width="100%"
+          <MovieBanner
+            isFavorite={isFavorite}
+            onFavoritePress={() => setIsFavorite(!isFavorite)}
             height={250}
             landscape
-            unPressable
             {...movie}
           />
           <View style={[styles.ph10, styles.mb5]}>

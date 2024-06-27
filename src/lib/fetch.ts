@@ -9,7 +9,9 @@ async function fetchTMDB<T>(path: string, method = 'GET') {
     },
   }).then((res) => {
     if (!res.ok) {
-      throw new Error(`${res.status} (${res.statusText})`)
+      throw new Error(
+        `${res.status} (${res.json().then((data) => data.status_message)})`,
+      )
     }
     return res.json() as Promise<T>
   })

@@ -2,10 +2,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   ParamListBase,
   StackActions,
+  useFocusEffect,
   useNavigation,
 } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { ActivityIndicator, Text } from 'react-native-paper'
 import MovieBanner from '../components/MovieBanner'
@@ -25,17 +26,19 @@ export default function Detail({
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const { id } = route.params as DetailProps
   const [isFavorite, setIsFavorite] = useState<boolean>(false)
-  useEffect(() => {
-    fetchMovieDetail(id)
-      .then((data) => {
-        setMovie(data)
-        setIsLoading(false)
-        checkFavoriteStatus(data)
-      })
-      .catch((e) => {
-        console.error(e)
-      })
-  }, [])
+  useFocusEffect(
+    useCallback(() => {
+      fetchMovieDetail(id)
+        .then((data) => {
+          setMovie(data)
+          checkFavoriteStatus(data)
+          setIsLoading(false)
+        })
+        .catch((e) => {
+          console.error(e)
+        })
+    }, []),
+  )
 
   const checkFavoriteStatus = async (movie: MovieDetail): Promise<void> => {
     try {
@@ -84,9 +87,7 @@ export default function Detail({
           JSON.stringify(newFavMovieList),
         )
 
-        if (movie.id === id) {
-          setIsFavorite(false)
-        }
+        setIsFavorite(false)
       }
     } catch (error) {
       console.log(error)
@@ -115,7 +116,7 @@ export default function Detail({
             {...movie}
           />
           <View style={[styles.ph10, styles.mb5]}>
-            <Text variant="bodyMedium" style={[styles.textJustify]}>
+            <Text variant="bodyMedium" style={[styles.textJustify, styles.mb5]}>
               {movie.overview ||
                 "We don't have any overview information for this movie yet."}
             </Text>

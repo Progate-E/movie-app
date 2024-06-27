@@ -59,7 +59,6 @@ export default function MovieBanner(props: MovieHeaderProps): ReactElement {
               iconColor="#C80036"
               size={35}
               onPress={props.onFavoritePress}
-              style={{}}
               animated
             />
           </View>

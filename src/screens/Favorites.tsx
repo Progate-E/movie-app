@@ -1,6 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { StackActions, useNavigation } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
+import {
+  StackActions,
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native'
+import React, { useCallback, useState } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -10,24 +14,24 @@ import { Movie } from '../global/types'
 export default function Favorites(): React.ReactElement {
   const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([])
   const navigation = useNavigation()
-
-  useEffect(() => {
-    const fetchFavoriteMovies = async () => {
-      try {
-        const storedMovies = await AsyncStorage.getItem('@FavoriteList')
-        if (storedMovies !== null) {
-          const parsedMovies: Movie[] = JSON.parse(storedMovies)
-          setFavoriteMovies(parsedMovies)
-        } else {
-          setFavoriteMovies([])
+  useFocusEffect(
+    useCallback(() => {
+      const fetchFavoriteMovies = async () => {
+        try {
+          const storedMovies = await AsyncStorage.getItem('@FavoriteList')
+          if (storedMovies !== null) {
+            const parsedMovies: Movie[] = JSON.parse(storedMovies)
+            setFavoriteMovies(parsedMovies)
+          } else {
+            setFavoriteMovies([])
+          }
+        } catch (error) {
+          console.error('Error fetching favorite movies:', error)
         }
-      } catch (error) {
-        console.error('Error fetching favorite movies:', error)
       }
-    }
-
-    fetchFavoriteMovies()
-  }, [])
+      fetchFavoriteMovies()
+    }, []),
+  )
 
   const handleMoviePress = (movie: Movie) => {
     navigation.dispatch(

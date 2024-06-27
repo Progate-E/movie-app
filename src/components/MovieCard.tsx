@@ -1,5 +1,4 @@
 import { FontAwesome } from '@expo/vector-icons'
-import { StackActions, useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { DimensionValue, ImageBackground, StyleSheet, View } from 'react-native'
 import { Card, Text } from 'react-native-paper'
@@ -17,21 +16,13 @@ interface MovieCardProps {
   landscape?: boolean
   width?: DimensionValue
   height?: DimensionValue
+  onPress: () => void
 }
 
 export default function MovieCard(props: MovieCardProps): React.ReactElement {
-  const navigation = useNavigation()
-
   return (
     <Card
-      onPress={() => {
-        navigation.dispatch(
-          StackActions.push('Detail', {
-            title: props.title,
-            id: props.id,
-          }),
-        )
-      }}
+      onPress={props.onPress}
       mode="elevated"
       style={[
         styles.m5,

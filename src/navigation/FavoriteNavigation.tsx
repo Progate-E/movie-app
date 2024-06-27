@@ -1,19 +1,30 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Favorites from '../screens/Favorites';
-import Detail from '../screens/Detail';
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import React from 'react'
+import Detail from '../screens/Detail'
+import Favorites from '../screens/Favorites'
 
-export type RootStackParamList = {
-  Favorites: undefined;
-  MovieDetail: { id: number };
-};
+const Stack = createNativeStackNavigator()
+interface Props {
+  title: string
+}
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
-
-export default function AppNavigator() {
+export default function FavoriteNavigation() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Favorites" component={Favorites} />
-      <Stack.Screen name="MovieDetail" component={Detail} />
+      <Stack.Screen
+        name="Favorites"
+        component={Favorites}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Detail"
+        component={Detail}
+        options={({ route }) => ({
+          title: (route.params as Props).title,
+        })}
+      />
     </Stack.Navigator>
-  );
+  )
 }

@@ -1,39 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import MovieCard from '../components/MovieCard'; 
-import { Movie } from '../global/types'; 
-import { Text } from 'react-native-paper';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { StackActions, useNavigation } from '@react-navigation/native'
+import React, { useEffect, useState } from 'react'
+import { ScrollView, StyleSheet, View } from 'react-native'
+import { Text } from 'react-native-paper'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import MovieCard from '../components/MovieCard'
+import { Movie } from '../global/types'
 
 export default function Favorites(): React.ReactElement {
-  const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([]);
-  const navigation = useNavigation();
+  const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([])
+  const navigation = useNavigation()
 
   useEffect(() => {
     const fetchFavoriteMovies = async () => {
       try {
-        const storedMovies = await AsyncStorage.getItem('@FavoriteList');
+        const storedMovies = await AsyncStorage.getItem('@FavoriteList')
         if (storedMovies !== null) {
-          const parsedMovies: Movie[] = JSON.parse(storedMovies);
-          setFavoriteMovies(parsedMovies);
-        }else{
+          const parsedMovies: Movie[] = JSON.parse(storedMovies)
+          setFavoriteMovies(parsedMovies)
+        } else {
           setFavoriteMovies([])
         }
       } catch (error) {
-        console.error('Error fetching favorite movies:', error);
+        console.error('Error fetching favorite movies:', error)
       }
-    };
+    }
 
-    fetchFavoriteMovies();
-  }, []);
+    fetchFavoriteMovies()
+  }, [])
 
   const handleMoviePress = (movie: Movie) => {
     navigation.dispatch(
-      StackActions.push('Detail', { id: movie.id, title: movie.title })
-    );
-  };
+      StackActions.push('Detail', { id: movie.id, title: movie.title }),
+    )
+  }
 
   return (
     <SafeAreaView>
@@ -51,17 +51,20 @@ export default function Favorites(): React.ReactElement {
                 overview={movie.overview}
                 release_date={movie.release_date}
                 backdrop_path={movie.backdrop_path}
+                onPress={() => handleMoviePress(movie)}
               />
             ))
           ) : (
             <View style={styles.noFavorites}>
-              <Text style={styles.noFavoritesText}>No favorite movies yet!</Text>
+              <Text style={styles.noFavoritesText}>
+                No favorite movies yet!
+              </Text>
             </View>
           )}
         </View>
       </ScrollView>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -83,4 +86,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-});
+})

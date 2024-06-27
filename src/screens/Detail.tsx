@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   ParamListBase,
   StackActions,
@@ -11,7 +12,6 @@ import MovieBanner from '../components/MovieBanner'
 import MovieList from '../components/MovieList'
 import { MovieDetail } from '../global/types'
 import { fetchMovieDetail, fetchRecommendedMovies } from '../lib/fetch'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 interface DetailProps {
   id: number
@@ -37,48 +37,54 @@ export default function Detail({
       })
   }, [])
 
-  const checkFavoriteStatus = async(movie: MovieDetail): Promise<void> => {
+  const checkFavoriteStatus = async (movie: MovieDetail): Promise<void> => {
     try {
-      const initialData: string | null = await AsyncStorage.getItem('@FavoriteList')
+      const initialData: string | null =
+        await AsyncStorage.getItem('@FavoriteList')
       if (initialData !== null) {
         const favMovieList: MovieDetail[] = JSON.parse(initialData)
         const isFav = favMovieList.some((favMovie) => favMovie.id === movie.id)
         setIsFavorite(isFav)
       }
-    }catch(error) {
-      console.log(error);
-      
+    } catch (error) {
+      console.error(error)
     }
   }
 
   const addFavorite = async (movie: MovieDetail): Promise<void> => {
     try {
-      const initialData: string | null = await AsyncStorage.getItem('@FavoriteList')
+      const initialData: string | null =
+        await AsyncStorage.getItem('@FavoriteList')
       let favMovieList: MovieDetail[] = []
 
-      if(initialData !== null) {
+      if (initialData !== null) {
         favMovieList = [...JSON.parse(initialData), movie]
-      }else{
+      } else {
         favMovieList = [movie]
       }
 
       await AsyncStorage.setItem('@FavoriteList', JSON.stringify(favMovieList))
       setIsFavorite(true)
-    }catch (error) {
-      console.log(error);
-      
+    } catch (error) {
+      console.log(error)
     }
   }
 
   const removeFavorite = async (id: number): Promise<void> => {
     try {
-      const initialData: string | null = await AsyncStorage.getItem('@FavoriteList')
+      const initialData: string | null =
+        await AsyncStorage.getItem('@FavoriteList')
       if (initialData !== null) {
         const favMovieList: MovieDetail[] = JSON.parse(initialData)
-        const newFavMovieList = favMovieList.filter((favMovie) => favMovie.id !== id)
-        await AsyncStorage.setItem('@FavoriteList', JSON.stringify(newFavMovieList))
+        const newFavMovieList = favMovieList.filter(
+          (favMovie) => favMovie.id !== id,
+        )
+        await AsyncStorage.setItem(
+          '@FavoriteList',
+          JSON.stringify(newFavMovieList),
+        )
 
-        if(movie.id === id) {
+        if (movie.id === id) {
           setIsFavorite(false)
         }
       }
@@ -109,7 +115,7 @@ export default function Detail({
             {...movie}
           />
           <View style={[styles.ph10, styles.mb5]}>
-            <Text variant="bodyMedium" style={[styles.mb5, styles.textJustify]}>
+            <Text variant="bodyMedium" style={[styles.textJustify]}>
               {movie.overview ||
                 "We don't have any overview information for this movie yet."}
             </Text>

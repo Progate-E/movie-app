@@ -1,4 +1,8 @@
-import { ParamListBase } from '@react-navigation/native'
+import {
+  ParamListBase,
+  StackActions,
+  useNavigation,
+} from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { FlashList } from '@shopify/flash-list'
 import React, { ReactElement } from 'react'
@@ -14,6 +18,7 @@ interface AllMoviesProps {
 export default function AllMovies({
   route,
 }: NativeStackScreenProps<ParamListBase>): ReactElement {
+  const navigation = useNavigation()
   const { movieId, fetchType } = route.params as AllMoviesProps
   const { data, isFetching, fetchNextPage, error, isError } = useMovies(
     fetchType,
@@ -25,7 +30,18 @@ export default function AllMovies({
   ) : (
     <FlashList
       data={data?.pages.flatMap((page) => page.results)}
-      renderItem={({ item }) => <MovieCard width="100%" landscape {...item} />}
+      renderItem={({ item }) => (
+        <MovieCard
+          width="100%"
+          landscape
+          {...item}
+          onPress={() => {
+            navigation.dispatch(
+              StackActions.push('Detail', { id: item.id, title: item.title }),
+            )
+          }}
+        />
+      )}
       onEndReached={fetchNextPage}
       refreshing={isFetching}
       onRefresh={fetchNextPage}

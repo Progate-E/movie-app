@@ -27,16 +27,21 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@eslint/compat": "^1.1.0",
-    "@eslint/js": "^9.5.0",
+    "@eslint/js": "^8.57.0",
     "@types/eslint__js": "^8.42.3",
     "@types/react": "~18.2.45",
-    "eslint": "^9.5.0",
+    "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.34.3",
     "globals": "^15.6.0",
     "prettier": "3.3.2",
     "typescript": "^5.5.2",
     "typescript-eslint": "^7.14.1"
+  },
+  "overrides": {
+    "@rneui/themed": {
+      "@rneui/base": "4.0.0-rc.8"
+    }
   },
   "private": true
 }

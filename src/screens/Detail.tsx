@@ -11,6 +11,7 @@ import MovieBanner from '../components/MovieBanner'
 import MovieList from '../components/MovieList'
 import { MovieDetail } from '../global/types'
 import { fetchMovieDetail, fetchRecommendedMovies } from '../lib/fetch'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 interface DetailProps {
   id: number
@@ -29,11 +30,71 @@ export default function Detail({
       .then((data) => {
         setMovie(data)
         setIsLoading(false)
+        checkFavoriteStatus(data)
       })
       .catch((e) => {
         console.error(e)
       })
   }, [])
+
+  const checkFavoriteStatus = async(movie: MovieDetail): Promise<void> => {
+    try {
+      const initialData: string | null = await AsyncStorage.getItem('@FavoriteList')
+      if (initialData !== null) {
+        const favMovieList: MovieDetail[] = JSON.parse(initialData)
+        const isFav = favMovieList.some((favMovie) => favMovie.id === movie.id)
+        setIsFavorite(isFav)
+      }
+    }catch(error) {
+      console.log(error);
+      
+    }
+  }
+
+  const addFavorite = async (movie: MovieDetail): Promise<void> => {
+    try {
+      const initialData: string | null = await AsyncStorage.getItem('@FavoriteList')
+      let favMovieList: MovieDetail[] = []
+
+      if(initialData !== null) {
+        favMovieList = [...JSON.parse(initialData), movie]
+      }else{
+        favMovieList = [movie]
+      }
+
+      await AsyncStorage.setItem('@FavoriteList', JSON.stringify(favMovieList))
+      setIsFavorite(true)
+    }catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+  const removeFavorite = async (id: number): Promise<void> => {
+    try {
+      const initialData: string | null = await AsyncStorage.getItem('@FavoriteList')
+      if (initialData !== null) {
+        const favMovieList: MovieDetail[] = JSON.parse(initialData)
+        const newFavMovieList = favMovieList.filter((favMovie) => favMovie.id !== id)
+        await AsyncStorage.setItem('@FavoriteList', JSON.stringify(newFavMovieList))
+
+        if(movie.id === id) {
+          setIsFavorite(false)
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleFavoritePress = (): void => {
+    if (isFavorite) {
+      removeFavorite(movie.id)
+    } else {
+      addFavorite(movie)
+    }
+  }
+
   return (
     <View style={styles.container}>
       {isLoading ? (
@@ -42,7 +103,7 @@ export default function Detail({
         <ScrollView>
           <MovieBanner
             isFavorite={isFavorite}
-            onFavoritePress={() => setIsFavorite(!isFavorite)}
+            onFavoritePress={handleFavoritePress}
             height={250}
             landscape
             {...movie}

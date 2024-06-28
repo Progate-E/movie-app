@@ -1,33 +1,34 @@
-import {
-  StackActions,
-  useNavigation,
-} from '@react-navigation/native'
-import React, { useState, useEffect } from 'react'
-import { ScrollView, StyleSheet, View, TextInput } from 'react-native'
-import { Text } from 'react-native-paper'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import MovieCard from '../MovieCard'
+import { FontAwesome } from '@expo/vector-icons'
+import { StackActions, useNavigation } from '@react-navigation/native'
+import React, { useEffect, useState } from 'react'
+import { ScrollView, StyleSheet, TextInput, View } from 'react-native'
+import { Text, ActivityIndicator } from 'react-native-paper' // Import ActivityIndicator from react-native-paper
 import { Movie } from '../../global/types'
 import { fetchMoviesByTitle } from '../../lib/fetch'
-import { FontAwesome } from '@expo/vector-icons'
-
+import MovieCard from '../MovieCard'
 
 export default function KeywordSearch(): React.ReactElement {
   const [search, setSearch] = useState<string>('')
   const [movies, setMovies] = useState<Movie[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false) // State for loading indicator
   const navigation = useNavigation()
 
   useEffect(() => {
     if (search.length > 0) {
       const fetchSearchedMovies = async () => {
+        setIsLoading(true) // Set loading to true when fetching starts
         try {
           const response = await fetchMoviesByTitle(search)
           setMovies(response.results)
         } catch (error) {
           console.error('Error fetching searched movies:', error)
+        } finally {
+          setIsLoading(false) // Set loading to false regardless of success or failure
         }
       }
       fetchSearchedMovies()
+    } else {
+      setMovies([]) // Clear movies when search input is empty
     }
   }, [search])
 
@@ -38,62 +39,78 @@ export default function KeywordSearch(): React.ReactElement {
   }
 
   return (
-    <SafeAreaView>
-    <View style={styles.searchContainer}>
-      <View style={styles.searchWrapper}>
-      <FontAwesome name="search" size={24} color="#7d8289" style={styles.searchIcon} />
-      <TextInput
-        style={styles.input}
-        placeholder="Input movie title here"
-        onChangeText={(text: string) => setSearch(text)}
-        value={search}
-      />
-      
-      
+    <View>
+      <View style={styles.searchContainer}>
+        <View style={styles.searchWrapper}>
+          <FontAwesome
+            name="search"
+            size={23}
+            color="#7d8289" // Set icon color same as picker placeholder arrow color
+            style={styles.searchIcon}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Insert movie title here"
+            onChangeText={(text: string) => setSearch(text)}
+            value={search}
+          />
+        </View>
       </View>
-    </View>
-    <ScrollView>
-      <View style={styles.container}>
-        {search.length > 0 && movies.length === 0 ? ( // Tambahkan kondisi ini
-          <View style={styles.noResults}>
-            <Text style={styles.noResultsText}>
-              No movies found!
-            </Text>
-          </View>
-        ) : (
-          movies.map((movie) => (
-            <MovieCard
-              key={movie.id}
-              id={movie.id}
-              title={movie.title}
-              poster_path={movie.poster_path}
-              popularity={movie.popularity}
-              vote_average={movie.vote_average}
-              overview={movie.overview}
-              release_date={movie.release_date}
-              backdrop_path={movie.backdrop_path}
-              onPress={() => handleMoviePress(movie)}
-            />
-          ))
+      <ScrollView
+        contentContainerStyle={{
+          paddingBottom: 525,
+        }}
+        showsVerticalScrollIndicator={false}
+      >
+        {isLoading && (
+          <ActivityIndicator
+            size="large"
+            color="#1a4a7f"
+            style={styles.loading}
+          />
         )}
-      </View>
-    </ScrollView>
-  </SafeAreaView>
+        <View style={styles.container}>
+          {search.length > 0 && movies.length === 0 && !isLoading ? ( // Show "No movies found!" only when not loading
+            <View style={styles.noResults}>
+              <Text style={styles.noResultsText}>No movies found!</Text>
+            </View>
+          ) : (
+            movies.map((movie) => (
+              <MovieCard
+                key={movie.id}
+                id={movie.id}
+                title={movie.title}
+                poster_path={movie.poster_path}
+                popularity={movie.popularity}
+                vote_average={movie.vote_average}
+                overview={movie.overview}
+                release_date={movie.release_date}
+                backdrop_path={movie.backdrop_path}
+                onPress={() => handleMoviePress(movie)}
+              />
+            ))
+          )}
+        </View>
+      </ScrollView>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   searchContainer: {
-    padding: 0,
+    marginVertical: 10,
   },
   input: {
     backgroundColor: '#eaf4ff',
-    padding: 12, // Ubah padding untuk meningkatkan ukuran input
+    padding: 12, // Increase padding for larger input size
     height: 55,
-    width: '91%',
-    marginBottom: 16,
-    marginTop:18,
-    alignItems: 'center'
+    width: '89%',
+    marginBottom: 13,
+    marginTop: 18,
+    alignItems: 'center',
+    color: '#7d8289', // Set placeholder text color
+    fontSize: 18, // Set font size
+    paddingLeft:16,
   },
   container: {
     flex: 1,
@@ -113,17 +130,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  searchWrapper:{
-    backgroundColor:'#fff',
+  searchWrapper: {
+    backgroundColor: '#fff',
     alignItems: 'center',
-    marginTop:5,
-
-
+    marginTop: 5,
+    paddingBottom: 5,
   },
-  searchIcon:{
-    position:'absolute',
-    zIndex:1,
-    right:30,
-    top:33,
-  }
+  searchIcon: {
+    position: 'absolute',
+    zIndex: 1,
+    right: 40,
+    top: 33,
+  },
+  loading: {
+    width: '100%',
+  },
 })

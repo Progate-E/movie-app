@@ -9,7 +9,7 @@ const Stack = createNativeStackNavigator();
 export default function SearchNavigation() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Search" component={Search} />
+      <Stack.Screen name="SearchScreen" component={Search} />
       <Stack.Screen name="KeywordSearchScreen" component={KeywordSearch} />
 
 

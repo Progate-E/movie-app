@@ -53,6 +53,7 @@ export default function KeywordSearch(): React.ReactElement {
             placeholder="Insert movie title here"
             onChangeText={(text: string) => setSearch(text)}
             value={search}
+            placeholderTextColor="#7d8289" // Set placeholder text color
           />
         </View>
       </View>
@@ -108,9 +109,9 @@ const styles = StyleSheet.create({
     marginBottom: 13,
     marginTop: 18,
     alignItems: 'center',
-    color: '#7d8289', // Set placeholder text color
+    color: '#1a4a7f', // Set text color to match picker category color
     fontSize: 18, // Set font size
-    paddingLeft:16,
+    paddingLeft: 16,
   },
   container: {
     flex: 1,

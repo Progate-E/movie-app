@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     padding: 12,
     height: 50,
     width: '48%', // Adjust width as per your requirement
-    marginBottom: 5,
+    marginBottom: 0,
   },
   pickerItem: {
     color: '#1a4a7f',

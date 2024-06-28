@@ -1,9 +1,9 @@
 import { FontAwesome } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import React from 'react'
-import Search from '../screens/Search'
 import FavoriteNavigation from './FavoriteNavigation'
 import HomeNavigation from './HomeNavigation'
+import SearchNavigation from './searchNavigation'
 
 const Tab = createBottomTabNavigator()
 export default function BottomNavigation(): React.ReactElement {
@@ -24,8 +24,8 @@ export default function BottomNavigation(): React.ReactElement {
         }}
       />
       <Tab.Screen
-        name="Search"
-        component={Search}
+        name="Search Navigation"
+        component={SearchNavigation}
         options={{
           tabBarIcon: ({ color }) => {
             return <FontAwesome name="search" size={28} color={color} />

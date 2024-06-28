@@ -7,7 +7,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { FlashList } from '@shopify/flash-list'
 import React, { ReactElement } from 'react'
 import { View } from 'react-native'
-import { Text } from 'react-native-paper'
+import { ActivityIndicator, Text } from 'react-native-paper'
 import MovieCard from '../components/MovieCard'
 import useMovies, { FetchType } from '../hooks/useMovies'
 
@@ -60,6 +60,11 @@ export default function AllMovies({
       keyExtractor={(item, i) => `${i}-${item.id}`}
       estimatedItemSize={175}
       onEndReachedThreshold={0.3}
+      ListFooterComponent={() => {
+        if (isFetching) {
+          return <ActivityIndicator size="large" color="#3495ff" animating />
+        }
+      }}
     />
   )
 }

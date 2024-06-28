@@ -21,6 +21,7 @@ export default function HomeNavigation(): React.ReactElement {
         component={Detail}
         options={({ route }) => ({
           title: (route.params as NavProps).title,
+          animation: 'slide_from_right',
         })}
       />
       <Stack.Screen
@@ -28,6 +29,7 @@ export default function HomeNavigation(): React.ReactElement {
         component={AllMovies}
         options={({ route }) => ({
           title: (route.params as NavProps).title,
+          animation: 'slide_from_right',
         })}
       />
     </Stack.Navigator>

@@ -36,6 +36,7 @@ export default function MovieCard(props: MovieCardProps): React.ReactElement {
           uri: `https://image.tmdb.org/t/p/w300${props.landscape ? props.backdrop_path : props.poster_path}`,
         }}
         style={styles.imageBackground}
+        imageStyle={styles.imageBackgroundImage}
       >
         <View style={styles.cardData}>
           <Card.Title title={props.title} titleStyle={styles.cardTitle} />
@@ -80,11 +81,16 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  imageBackgroundImage: {
+    borderRadius: 10,
+  },
   cardData: {
     backgroundColor: 'rgba(0,0,0,0.5)',
     position: 'absolute',
     bottom: 0,
     width: '100%',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
   cardTitle: {
     color: 'white',

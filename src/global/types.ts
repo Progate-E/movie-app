@@ -78,4 +78,8 @@ interface MovieParams {
   genre?: number[] | number
 }
 
-export { Genre, Movie, MovieDetail, MovieParams, Movies }
+interface NavProps {
+  title: string
+}
+
+export { Genre, Movie, MovieDetail, MovieParams, Movies, NavProps }

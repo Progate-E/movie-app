@@ -2,6 +2,7 @@ import { Picker } from '@react-native-picker/picker'
 import { StackActions, useNavigation } from '@react-navigation/native' // Import navigation
 import React, { useEffect, useState } from 'react'
 import { Button, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator } from 'react-native-paper'
 import { fetchOptions } from '../../data/fetchOption'
 import { Movie } from '../../global/types'
 import MovieCard from '../MovieCard'
@@ -16,6 +17,7 @@ export default function CategorySearch(): JSX.Element {
   const [category, setCategory] = useState<CategoryType>()
   const [movies, setMovies] = useState<Movie[]>([])
   const navigation = useNavigation() // Initialize navigation
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const getCategories = async (): Promise<void> => {
     const url = 'https://api.themoviedb.org/3/genre/movie/list'
@@ -32,6 +34,8 @@ export default function CategorySearch(): JSX.Element {
 
   const onSubmit = async () => {
     if (category) {
+      setIsLoading(true)
+      setMovies([])
       try {
         const url = `${process.env.EXPO_PUBLIC_TMDB_API_BASE_URL}/discover/movie?with_genres=${category.id}`
         const options = fetchOptions()
@@ -40,7 +44,9 @@ export default function CategorySearch(): JSX.Element {
         const res = await req.json()
 
         setMovies(res.results)
+        setIsLoading(false)
       } catch (error) {
+        setIsLoading(false)
         console.error('Error fetching movies by genre:', error)
       }
     }
@@ -88,6 +94,13 @@ export default function CategorySearch(): JSX.Element {
         contentContainerStyle={styles.moviesContainer}
         showsVerticalScrollIndicator={false}
       >
+        {isLoading && (
+          <ActivityIndicator
+            size="large"
+            color="#1a4a7f"
+            style={styles.loading}
+          />
+        )}
         {movies.length > 0 ? (
           movies.map((movie) => (
             <MovieCard
@@ -146,5 +159,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  loading: {
+    width: '100%',
+    // justifyContent: 'center',
+    // alignItems: 'center',
   },
 })

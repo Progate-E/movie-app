@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import React from 'react'
 import FavoriteNavigation from './FavoriteNavigation'
 import HomeNavigation from './HomeNavigation'
-import SearchNavigation from './searchNavigation'
+import SearchNavigation from './SearchNavigation'
 
 const Tab = createBottomTabNavigator()
 export default function BottomNavigation(): React.ReactElement {
@@ -24,7 +24,7 @@ export default function BottomNavigation(): React.ReactElement {
         }}
       />
       <Tab.Screen
-        name="Search Navigation"
+        name="Search"
         component={SearchNavigation}
         options={{
           tabBarIcon: ({ color }) => {

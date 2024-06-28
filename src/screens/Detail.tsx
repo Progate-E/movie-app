@@ -162,12 +162,12 @@ export default function Detail({
             </View>
           </View>
           <MovieList
-            title="You may also like"
+            title="You might also like"
             fetchFunc={async () => fetchRecommendedMovies(movie.id)}
             onSeeMore={() => {
               navigation.dispatch(
                 StackActions.push('AllMovies', {
-                  title: 'Recommended Movies',
+                  title: 'You Might Also Like',
                   fetchType: 'recommended',
                   movieId: movie.id,
                 }),

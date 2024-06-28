@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import React from 'react'
+import AllMovies from '../screens/AllMovies'
 import Detail from '../screens/Detail'
 import Favorites from '../screens/Favorites'
 
@@ -21,6 +22,13 @@ export default function FavoriteNavigation() {
       <Stack.Screen
         name="Detail"
         component={Detail}
+        options={({ route }) => ({
+          title: (route.params as Props).title,
+        })}
+      />
+      <Stack.Screen
+        name="AllMovies"
+        component={AllMovies}
         options={({ route }) => ({
           title: (route.params as Props).title,
         })}

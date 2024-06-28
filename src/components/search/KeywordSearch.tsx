@@ -9,6 +9,8 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import MovieCard from '../MovieCard'
 import { Movie } from '../../global/types'
 import { fetchMoviesByTitle } from '../../lib/fetch'
+import { FontAwesome } from '@expo/vector-icons'
+
 
 export default function KeywordSearch(): React.ReactElement {
   const [search, setSearch] = useState<string>('')
@@ -37,55 +39,61 @@ export default function KeywordSearch(): React.ReactElement {
 
   return (
     <SafeAreaView>
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Input movie title here"
-          onChangeText={(text: string) => setSearch(text)}
-          value={search}
-        />
+    <View style={styles.searchContainer}>
+      <View style={styles.searchWrapper}>
+      <FontAwesome name="search" size={24} color="#7d8289" style={styles.searchIcon} />
+      <TextInput
+        style={styles.input}
+        placeholder="Input movie title here"
+        onChangeText={(text: string) => setSearch(text)}
+        value={search}
+      />
+      
+      
       </View>
-      <ScrollView>
-        <View style={styles.container}>
-          {movies.length > 0 ? (
-            movies.map((movie) => (
-              <MovieCard
-                key={movie.id}
-                id={movie.id}
-                title={movie.title}
-                poster_path={movie.poster_path}
-                popularity={movie.popularity}
-                vote_average={movie.vote_average}
-                overview={movie.overview}
-                release_date={movie.release_date}
-                backdrop_path={movie.backdrop_path}
-                onPress={() => handleMoviePress(movie)}
-              />
-            ))
-          ) : (
-            <View style={styles.noResults}>
-              <Text style={styles.noResultsText}>
-                No movies found!
-              </Text>
-            </View>
-          )}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    </View>
+    <ScrollView>
+      <View style={styles.container}>
+        {search.length > 0 && movies.length === 0 ? ( // Tambahkan kondisi ini
+          <View style={styles.noResults}>
+            <Text style={styles.noResultsText}>
+              No movies found!
+            </Text>
+          </View>
+        ) : (
+          movies.map((movie) => (
+            <MovieCard
+              key={movie.id}
+              id={movie.id}
+              title={movie.title}
+              poster_path={movie.poster_path}
+              popularity={movie.popularity}
+              vote_average={movie.vote_average}
+              overview={movie.overview}
+              release_date={movie.release_date}
+              backdrop_path={movie.backdrop_path}
+              onPress={() => handleMoviePress(movie)}
+            />
+          ))
+        )}
+      </View>
+    </ScrollView>
+  </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   searchContainer: {
-    padding: 8,
+    padding: 0,
   },
   input: {
     backgroundColor: '#eaf4ff',
-    padding: 8,
-    borderRadius: 8,
-    borderStyle: 'solid',
-    borderWidth: 0.1,
-    borderColor: '#777777'
+    padding: 12, // Ubah padding untuk meningkatkan ukuran input
+    height: 55,
+    width: '91%',
+    marginBottom: 16,
+    marginTop:18,
+    alignItems: 'center'
   },
   container: {
     flex: 1,
@@ -105,4 +113,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  searchWrapper:{
+    backgroundColor:'#fff',
+    alignItems: 'center',
+    marginTop:5,
+
+
+  },
+  searchIcon:{
+    position:'absolute',
+    zIndex:1,
+    right:30,
+    top:33,
+  }
 })

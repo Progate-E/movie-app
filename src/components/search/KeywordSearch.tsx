@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     color: '#7d8289', // Set placeholder text color
     fontSize: 18, // Set font size
+    paddingLeft:16,
   },
   container: {
     flex: 1,
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
   searchIcon: {
     position: 'absolute',
     zIndex: 1,
-    right: 32,
+    right: 40,
     top: 33,
   },
   loading: {

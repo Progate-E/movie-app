@@ -147,9 +147,6 @@ const styles = StyleSheet.create({
     padding: 12,
     height: 50,
     width: '100%',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
     marginBottom: 5,
   },
   moviesContainer: {
@@ -158,6 +155,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     paddingBottom: 675,
     paddingHorizontal: 16,
+    marginTop:20,
   },
   noResults: {
     flex: 1,

@@ -6,6 +6,7 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { FlashList } from '@shopify/flash-list'
 import React, { ReactElement } from 'react'
+import { View } from 'react-native'
 import { Text } from 'react-native-paper'
 import MovieCard from '../components/MovieCard'
 import useMovies, { FetchType } from '../hooks/useMovies'
@@ -29,22 +30,33 @@ export default function AllMovies({
     <Text>Error: {error?.message}</Text>
   ) : (
     <FlashList
+      contentContainerStyle={{
+        padding: 15,
+      }}
       data={data?.pages.flatMap((page) => page.results)}
       renderItem={({ item }) => (
-        <MovieCard
-          width="100%"
-          landscape
-          {...item}
-          onPress={() => {
-            navigation.dispatch(
-              StackActions.push('Detail', { id: item.id, title: item.title }),
-            )
+        <View
+          style={{
+            flexGrow: 1,
+            alignItems: 'center',
           }}
-        />
+        >
+          <MovieCard
+            {...item}
+            width={175}
+            onPress={() => {
+              navigation.dispatch(
+                StackActions.push('Detail', { id: item.id, title: item.title }),
+              )
+            }}
+          />
+        </View>
       )}
       onEndReached={fetchNextPage}
       refreshing={isFetching}
+      numColumns={2}
       onRefresh={fetchNextPage}
+      showsVerticalScrollIndicator={false}
       keyExtractor={(item, i) => `${i}-${item.id}`}
       estimatedItemSize={175}
       onEndReachedThreshold={0.3}

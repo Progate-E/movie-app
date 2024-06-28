@@ -12,9 +12,14 @@ interface CategoryType {
   name: string
 }
 
+const nilCategory: CategoryType = {
+  id: -999,
+  name: 'Select a category',
+} // `placeholder` category coz react-native-picker's placeholder prop only works on Windows
+
 export default function CategorySearch(): JSX.Element {
   const [categories, setCategories] = useState<CategoryType[]>([])
-  const [category, setCategory] = useState<CategoryType>()
+  const [selected, setSelected] = useState<CategoryType>(nilCategory)
   const [movies, setMovies] = useState<Movie[]>([])
   const navigation = useNavigation() // Initialize navigation
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -26,18 +31,18 @@ export default function CategorySearch(): JSX.Element {
     try {
       const request = await fetch(url, options)
       const response = await request.json()
-      setCategories(response.genres)
+      setCategories([nilCategory, ...response.genres])
     } catch (error) {
       console.error('Error fetching categories:', error)
     }
   }
 
   const onSubmit = async () => {
-    if (category) {
+    if (selected) {
       setIsLoading(true)
       setMovies([])
       try {
-        const url = `${process.env.EXPO_PUBLIC_TMDB_API_BASE_URL}/discover/movie?with_genres=${category.id}`
+        const url = `${process.env.EXPO_PUBLIC_TMDB_API_BASE_URL}/discover/movie?with_genres=${selected.id}`
         const options = fetchOptions()
 
         const req = await fetch(url, options)
@@ -66,25 +71,36 @@ export default function CategorySearch(): JSX.Element {
     <View>
       <View style={styles.container}>
         <Picker
-          selectedValue={category?.id}
+          selectedValue={selected?.id}
           onValueChange={(itemValue) => {
-            const selectedCategory = categories.find(
-              (cat) => cat.id === itemValue,
-            )
-            setCategory(selectedCategory)
+            const selectedCategory =
+              categories.find((cat) => cat.id === itemValue) || nilCategory
+            setSelected(selectedCategory)
           }}
           style={styles.picker}
+          onFocus={() => {
+            setSelected({} as CategoryType) // when the selector is displayed, set the selected category to an empty object to prevent the placeholder from being selected
+          }}
         >
-          {categories.map((category: CategoryType) => (
-            <Picker.Item
-              key={category.id}
-              label={category.name}
-              value={category.id}
-            />
-          ))}
+          {categories.map((category: CategoryType) =>
+            category.id === nilCategory.id ? (
+              <Picker.Item
+                key={category.id}
+                label={category.name}
+                value={category.id}
+                enabled={selected.id === nilCategory.id}
+              />
+            ) : (
+              <Picker.Item
+                key={category.id}
+                label={category.name}
+                value={category.id}
+              />
+            ),
+          )}
         </Picker>
         <Button
-          disabled={!category}
+          disabled={selected.id === nilCategory.id}
           title="Search"
           onPress={onSubmit}
           color="#1a4a7f"
@@ -128,8 +144,9 @@ export default function CategorySearch(): JSX.Element {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 30,
-    padding: 16,
+    marginTop: 15,
+    paddingVertical: 18,
+    paddingHorizontal: 21,
     backgroundColor: '#fff',
   },
   picker: {

@@ -11,9 +11,7 @@ const Stack = createNativeStackNavigator()
 export default function SearchNavigation() {
   return (
     <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
+      
     >
       <Stack.Screen
         name="SearchScreen"

@@ -80,9 +80,12 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   input: {
-    backgroundColor: '#eee',
+    backgroundColor: '#eaf4ff',
     padding: 8,
     borderRadius: 8,
+    borderStyle: 'solid',
+    borderWidth: 0.1,
+    borderColor: '#777777'
   },
   container: {
     flex: 1,

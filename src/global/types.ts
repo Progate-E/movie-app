@@ -22,6 +22,10 @@ interface Movies {
   total_results: number
 }
 
+interface Genres {
+  genres: Genre[]
+}
+
 interface Genre {
   id: number
   name: string
@@ -82,4 +86,4 @@ interface NavProps {
   title: string
 }
 
-export { Genre, Movie, MovieDetail, MovieParams, Movies, NavProps }
+export { Genre, Genres, Movie, MovieDetail, MovieParams, Movies, NavProps }

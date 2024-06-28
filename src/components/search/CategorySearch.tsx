@@ -1,74 +1,80 @@
-import React, { useEffect, useState } from 'react';
-import { Button, StyleSheet, View, ScrollView, Text } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import { Movie } from '../../global/types';
-import { fetchOptions } from '../../data/fetchOption';
-import MovieCard from '../MovieCard';
-import { StackActions, useNavigation } from '@react-navigation/native'; // Import navigation
+import { Picker } from '@react-native-picker/picker'
+import { StackActions, useNavigation } from '@react-navigation/native' // Import navigation
+import React, { useEffect, useState } from 'react'
+import { Button, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { fetchOptions } from '../../data/fetchOption'
+import { Movie } from '../../global/types'
+import MovieCard from '../MovieCard'
 
 interface CategoryType {
-  id: number;
-  name: string;
+  id: number
+  name: string
 }
 
 export default function CategorySearch(): JSX.Element {
-  const [categories, setCategories] = useState<CategoryType[]>([]);
-  const [category, setCategory] = useState<CategoryType>();
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const navigation = useNavigation(); // Initialize navigation
+  const [categories, setCategories] = useState<CategoryType[]>([])
+  const [category, setCategory] = useState<CategoryType>()
+  const [movies, setMovies] = useState<Movie[]>([])
+  const navigation = useNavigation() // Initialize navigation
 
   const getCategories = async (): Promise<void> => {
-    const url = 'https://api.themoviedb.org/3/genre/movie/list';
-    const options = fetchOptions();
+    const url = 'https://api.themoviedb.org/3/genre/movie/list'
+    const options = fetchOptions()
 
     try {
-      const request = await fetch(url, options);
-      const response = await request.json();
-      setCategories(response.genres);
+      const request = await fetch(url, options)
+      const response = await request.json()
+      setCategories(response.genres)
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error('Error fetching categories:', error)
     }
-  };
+  }
 
   const onSubmit = async () => {
     if (category) {
       try {
-        const url = `${process.env.EXPO_PUBLIC_TMDB_API_BASE_URL}/discover/movie?with_genres=${category.id}`;
-        const options = fetchOptions();
+        const url = `${process.env.EXPO_PUBLIC_TMDB_API_BASE_URL}/discover/movie?with_genres=${category.id}`
+        const options = fetchOptions()
 
-        const req = await fetch(url, options);
-        const res = await req.json();
+        const req = await fetch(url, options)
+        const res = await req.json()
 
-        setMovies(res.results);
+        setMovies(res.results)
       } catch (error) {
-        console.error('Error fetching movies by genre:', error);
+        console.error('Error fetching movies by genre:', error)
       }
     }
-  };
+  }
 
   useEffect(() => {
-    getCategories();
-  }, []);
+    getCategories()
+  }, [])
 
   const handleMoviePress = (movie: Movie) => {
     navigation.dispatch(
-      StackActions.push('Detail', { id: movie.id, title: movie.title }) // Navigate to MovieDetail screen
-    );
-  };
+      StackActions.push('Detail', { id: movie.id, title: movie.title }), // Navigate to MovieDetail screen
+    )
+  }
 
   return (
-    <ScrollView>
+    <View>
       <View style={styles.container}>
         <Picker
           selectedValue={category?.id}
-          onValueChange={(itemValue, itemIndex) => {
-            const selectedCategory = categories.find(cat => cat.id === itemValue);
-            setCategory(selectedCategory);
+          onValueChange={(itemValue) => {
+            const selectedCategory = categories.find(
+              (cat) => cat.id === itemValue,
+            )
+            setCategory(selectedCategory)
           }}
           style={styles.picker}
         >
           {categories.map((category: CategoryType) => (
-            <Picker.Item key={category.id} label={category.name} value={category.id} />
+            <Picker.Item
+              key={category.id}
+              label={category.name}
+              value={category.id}
+            />
           ))}
         </Picker>
         <Button
@@ -78,7 +84,10 @@ export default function CategorySearch(): JSX.Element {
           color="#1a4a7f"
         />
       </View>
-      <View style={styles.moviesContainer}>
+      <ScrollView
+        contentContainerStyle={styles.moviesContainer}
+        showsVerticalScrollIndicator={false}
+      >
         {movies.length > 0 ? (
           movies.map((movie) => (
             <MovieCard
@@ -96,13 +105,12 @@ export default function CategorySearch(): JSX.Element {
           ))
         ) : (
           <View style={styles.noResults}>
-            <Text style={styles.noResultsText}>
-            </Text>
+            <Text style={styles.noResultsText}></Text>
           </View>
         )}
-      </View>
-    </ScrollView>
-  );
+      </ScrollView>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -120,14 +128,12 @@ const styles = StyleSheet.create({
     height: 50,
     width: '100%',
     marginBottom: 16,
-    
   },
   moviesContainer: {
-    flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-evenly',
-    paddingVertical: 10,
+    paddingBottom: 675,
     paddingHorizontal: 16,
   },
   noResults: {
@@ -141,4 +147,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-});
+})

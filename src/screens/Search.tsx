@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
-import KeywordSearch from '../components/search/KeywordSearch'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import CategorySearch from '../components/search/CategorySearch'
+import KeywordSearch from '../components/search/KeywordSearch'
 const Search = (): JSX.Element => {
   const [selectedBar, setSelectedBar] = useState<string>('keyword')
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View>
         <View style={styles.topBarContainer}>
           {['keyword', 'category'].map((item: string, index: number) => (
@@ -31,7 +32,7 @@ const Search = (): JSX.Element => {
         </View>
         {selectedBar === 'keyword' ? <KeywordSearch /> : <CategorySearch />}
       </View>
-    </View>
+    </SafeAreaView>
   )
 }
 

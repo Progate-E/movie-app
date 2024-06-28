@@ -1,7 +1,7 @@
 import { Picker } from '@react-native-picker/picker'
-import { StackActions, useNavigation } from '@react-navigation/native' // Import navigation
+import { StackActions, useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { Button, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { ActivityIndicator } from 'react-native-paper'
 import { fetchOptions } from '../../data/fetchOption'
 import { Movie } from '../../global/types'
@@ -14,14 +14,14 @@ interface CategoryType {
 
 const nilCategory: CategoryType = {
   id: -999,
-  name: 'Select a category',
-} // `placeholder` category coz react-native-picker's placeholder prop only works on Windows
+  name: 'Select a category', 
+}
 
 export default function CategorySearch(): JSX.Element {
   const [categories, setCategories] = useState<CategoryType[]>([])
   const [selected, setSelected] = useState<CategoryType>(nilCategory)
   const [movies, setMovies] = useState<Movie[]>([])
-  const navigation = useNavigation() // Initialize navigation
+  const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const getCategories = async (): Promise<void> => {
@@ -37,23 +37,21 @@ export default function CategorySearch(): JSX.Element {
     }
   }
 
-  const onSubmit = async () => {
-    if (selected) {
-      setIsLoading(true)
-      setMovies([])
-      try {
-        const url = `${process.env.EXPO_PUBLIC_TMDB_API_BASE_URL}/discover/movie?with_genres=${selected.id}`
-        const options = fetchOptions()
+  const fetchMoviesByGenre = async (genreId: number): Promise<void> => {
+    setIsLoading(true)
+    setMovies([])
+    try {
+      const url = `${process.env.EXPO_PUBLIC_TMDB_API_BASE_URL}/discover/movie?with_genres=${genreId}`
+      const options = fetchOptions()
 
-        const req = await fetch(url, options)
-        const res = await req.json()
+      const req = await fetch(url, options)
+      const res = await req.json()
 
-        setMovies(res.results)
-        setIsLoading(false)
-      } catch (error) {
-        setIsLoading(false)
-        console.error('Error fetching movies by genre:', error)
-      }
+      setMovies(res.results)
+      setIsLoading(false)
+    } catch (error) {
+      setIsLoading(false)
+      console.error('Error fetching movies by genre:', error)
     }
   }
 
@@ -61,9 +59,15 @@ export default function CategorySearch(): JSX.Element {
     getCategories()
   }, [])
 
+  useEffect(() => {
+    if (selected.id !== nilCategory.id) {
+      fetchMoviesByGenre(selected.id)
+    }
+  }, [selected])
+
   const handleMoviePress = (movie: Movie) => {
     navigation.dispatch(
-      StackActions.push('Detail', { id: movie.id, title: movie.title }), // Navigate to MovieDetail screen
+      StackActions.push('Detail', { id: movie.id, title: movie.title }),
     )
   }
 
@@ -79,32 +83,21 @@ export default function CategorySearch(): JSX.Element {
           }}
           style={styles.picker}
           onFocus={() => {
-            setSelected({} as CategoryType) // when the selector is displayed, set the selected category to an empty object to prevent the placeholder from being selected
+            setSelected({} as CategoryType)
           }}
         >
           {categories.map((category: CategoryType) =>
-            category.id === nilCategory.id ? (
-              <Picker.Item
-                key={category.id}
-                label={category.name}
-                value={category.id}
-                enabled={selected.id === nilCategory.id}
-              />
-            ) : (
-              <Picker.Item
-                key={category.id}
-                label={category.name}
-                value={category.id}
-              />
-            ),
+            <Picker.Item
+              key={category.id}
+              label={category.name}
+              value={category.id}
+              style={{
+                color: category.id === nilCategory.id ? '#7d8289' : '#1a4a7f', // Adjust colors based on selection
+                fontSize: category.id === nilCategory.id ? 18 : 18, // Adjust font size based on selection
+              }}
+            />
           )}
         </Picker>
-        <Button
-          disabled={selected.id === nilCategory.id}
-          title="Search"
-          onPress={onSubmit}
-          color="#1a4a7f"
-        />
       </View>
       <ScrollView
         contentContainerStyle={styles.moviesContainer}
@@ -129,7 +122,7 @@ export default function CategorySearch(): JSX.Element {
               overview={movie.overview}
               release_date={movie.release_date}
               backdrop_path={movie.backdrop_path}
-              onPress={() => handleMoviePress(movie)} // Handle navigation to movie detail page
+              onPress={() => handleMoviePress(movie)}
             />
           ))
         ) : (
@@ -152,12 +145,12 @@ const styles = StyleSheet.create({
   picker: {
     backgroundColor: '#eaf4ff',
     padding: 12,
+    height: 50,
+    width: '100%',
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#ccc',
-    height: 50,
-    width: '100%',
-    marginBottom: 16,
+    marginBottom: 5,
   },
   moviesContainer: {
     flexDirection: 'row',
@@ -179,7 +172,5 @@ const styles = StyleSheet.create({
   },
   loading: {
     width: '100%',
-    // justifyContent: 'center',
-    // alignItems: 'center',
   },
 })

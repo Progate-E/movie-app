@@ -1,4 +1,4 @@
-import { Genre, MovieDetail, Movies } from '../global/types'
+import { Genres, MovieDetail, Movies } from '../global/types'
 
 async function fetchTMDB<T>(path: string, method = 'GET') {
   return fetch(`${process.env.EXPO_PUBLIC_TMDB_API_BASE_URL}${path}`, {
@@ -25,7 +25,7 @@ const fetchMovieDetail = async (movie_id: number): Promise<MovieDetail> => {
   return fetchTMDB(`/movie/${movie_id}`)
 }
 
-const fetchAvailableMovieGenres = async (): Promise<Genre[]> => {
+const fetchAvailableMovieGenres = async (): Promise<Genres> => {
   return fetchTMDB('/genre/movie/list')
 }
 

@@ -3,6 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import React, { ReactElement } from 'react'
 import { ImageBackground, StyleSheet, View } from 'react-native'
 import { IconButton, Text } from 'react-native-paper'
+import TextTicker from 'react-native-text-ticker'
 interface MovieHeaderProps {
   id: number
   title: string
@@ -38,10 +39,16 @@ export default function MovieBanner(props: MovieHeaderProps): ReactElement {
           style={styles.gradient}
         >
           <View style={styles.contentContainer}>
-            <View>
-              <Text variant="titleLarge" style={styles.title} numberOfLines={1}>
-                {props.title}
-              </Text>
+            <View style={styles.titleAndRating}>
+              <TextTicker scrollSpeed={30} bounce={false}>
+                <Text
+                  variant="titleLarge"
+                  style={styles.title}
+                  numberOfLines={1}
+                >
+                  {props.title}
+                </Text>
+              </TextTicker>
               <View style={styles.rating}>
                 <FontAwesome
                   name="star"
@@ -102,5 +109,8 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 15,
     fontWeight: '900',
+  },
+  titleAndRating: {
+    flex: 2,
   },
 })

@@ -1,13 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import React from 'react'
+import { NavProps } from '../global/types'
 import AllMovies from '../screens/AllMovies'
 import Detail from '../screens/Detail'
 import Home from '../screens/Home'
 const Stack = createNativeStackNavigator()
-
-interface Props {
-  title: string
-}
 
 export default function HomeNavigation(): React.ReactElement {
   return (
@@ -23,14 +20,16 @@ export default function HomeNavigation(): React.ReactElement {
         name="Detail"
         component={Detail}
         options={({ route }) => ({
-          title: (route.params as Props).title,
+          title: (route.params as NavProps).title,
+          animation: 'slide_from_right',
         })}
       />
       <Stack.Screen
         name="AllMovies"
         component={AllMovies}
         options={({ route }) => ({
-          title: (route.params as Props).title,
+          title: (route.params as NavProps).title,
+          animation: 'slide_from_right',
         })}
       />
     </Stack.Navigator>

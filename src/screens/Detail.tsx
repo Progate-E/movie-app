@@ -14,7 +14,7 @@ import MovieList from '../components/MovieList'
 import PressableAvatar from '../components/PressableAvatar'
 import SectionLabel from '../components/SectionLabel'
 import { MovieDetail } from '../global/types'
-import { fetchMovieDetail, fetchRecommendedMovies } from '../lib/fetch'
+import { fetchMovieDetail } from '../lib/fetch'
 
 interface DetailProps {
   id: number
@@ -107,7 +107,12 @@ export default function Detail({
   return (
     <View style={styles.container}>
       {isLoading ? (
-        <ActivityIndicator size="large" />
+        <ActivityIndicator
+          size="large"
+          style={{
+            marginTop: 15,
+          }}
+        />
       ) : (
         <ScrollView>
           <MovieBanner
@@ -254,7 +259,9 @@ export default function Detail({
           </View>
           <MovieList
             title="You might also like"
-            fetchFunc={async () => fetchRecommendedMovies(movie.id)}
+            data={movie.recommendations.results}
+            isLoading={isLoading}
+            seeMoreDisabled={!movie || movie.recommendations.total_pages <= 1}
             onSeeMore={() => {
               navigation.dispatch(
                 StackActions.push('AllMovies', {

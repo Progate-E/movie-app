@@ -17,12 +17,14 @@ async function fetchTMDB<T>(path: string, method = 'GET') {
   })
 }
 
-const fetchPopularMovies = async (page: number): Promise<Movies> => {
+const fetchPopularMovies = async (page = 1): Promise<Movies> => {
   return fetchTMDB(`/movie/popular?page=${page}`)
 }
 
 const fetchMovieDetail = async (movie_id: number): Promise<MovieDetail> => {
-  return fetchTMDB(`/movie/${movie_id}?append_to_response=release_dates,casts`)
+  return fetchTMDB(
+    `/movie/${movie_id}?append_to_response=release_dates,casts,recommendations`,
+  )
 }
 
 const fetchAvailableMovieGenres = async (): Promise<Genres> => {
@@ -48,15 +50,15 @@ const fetchMoviesByTitle = async (title: string): Promise<Movies> => {
   )
 }
 
-const fetchNowPlayingMovies = async (page: number): Promise<Movies> => {
+const fetchNowPlayingMovies = async (page = 1): Promise<Movies> => {
   return fetchTMDB(`/movie/now_playing?page=${page}`)
 }
 
-const fetchTopRatedMovies = async (page: number): Promise<Movies> => {
+const fetchTopRatedMovies = async (page = 1): Promise<Movies> => {
   return fetchTMDB(`/movie/top_rated?page=${page}`)
 }
 
-const fetchUpcomingMovies = async (page: number): Promise<Movies> => {
+const fetchUpcomingMovies = async (page = 1): Promise<Movies> => {
   return fetchTMDB(`/movie/upcoming?page=${page}`)
 }
 

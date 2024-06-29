@@ -1,34 +1,24 @@
 import { StackActions, useNavigation } from '@react-navigation/native'
 import { Skeleton } from '@rneui/themed'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { Button, Text } from 'react-native-paper'
-import { Movies } from '../global/types'
+import { Movie } from '../global/types'
 import MovieCard from './MovieCard'
 import SectionLabel from './SectionLabel'
 
 interface MovieListProps {
   landscape?: boolean
   title: string
-  fetchFunc: () => Promise<Movies>
   onSeeMore: () => void
+  isLoading: boolean
+  data: Movie[]
+  seeMoreDisabled?: boolean
 }
 
 export default function MovieList(props: MovieListProps): React.ReactElement {
-  const [movies, setMovies] = useState<Movies>({} as Movies)
-  const [isLoading, setIsLoading] = useState<boolean>(true)
   const navigation = useNavigation()
-  useEffect(() => {
-    props
-      .fetchFunc()
-      .then((data) => {
-        setMovies(data)
-        setIsLoading(false)
-      })
-      .catch((e) => {
-        console.error(e)
-      })
-  }, [])
+
   return (
     <View style={styles.container}>
       <View style={styles.listHeader}>
@@ -38,17 +28,17 @@ export default function MovieList(props: MovieListProps): React.ReactElement {
           textColor="#007AFF"
           contentStyle={styles.seeMore}
           onPress={props.onSeeMore}
-          disabled={!movies.results || movies.results.length === 0}
+          disabled={props.seeMoreDisabled}
           compact
         >
           See more
         </Button>
       </View>
-      {isLoading ? (
+      {props.isLoading ? (
         <Skeleton width="100%" height={200} animation="wave" />
       ) : (
         <FlatList
-          data={movies.results}
+          data={props.data}
           renderItem={({ item }) => (
             <MovieCard
               landscape={props.landscape}

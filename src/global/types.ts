@@ -96,6 +96,7 @@ interface MovieDetail {
   vote_count: number
   release_dates: ReleaseDatesResponse // needed for certification
   casts: Casts
+  recommendations: Movies
 }
 
 interface MovieParams {

@@ -63,7 +63,7 @@ export default function AllMovies({
       estimatedItemSize={175}
       onEndReachedThreshold={0.3}
       ListFooterComponent={() => {
-        if (isFetching) {
+        if (isFetching && data && data.pages.length > 0) {
           return <ActivityIndicator size="large" color="#3495ff" animating />
         }
       }}

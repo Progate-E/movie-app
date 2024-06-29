@@ -112,6 +112,11 @@ export default function Detail({
             isFavorite={isFavorite}
             onFavoritePress={handleFavoritePress}
             height={250}
+            certification={
+              movie.release_dates.results.filter(
+                (cert) => cert.iso_3166_1 === 'US',
+              )[0].release_dates[0].certification || 'NR'
+            }
             landscape
             {...movie}
           />
@@ -121,12 +126,7 @@ export default function Detail({
                 "We don't have any overview information for this movie yet."}
             </Text>
             <View style={styles.inlineData}>
-              <Text
-                variant="labelLarge"
-                style={{
-                  fontWeight: '900',
-                }}
-              >
+              <Text variant="labelLarge" style={styles.fontExtraBold}>
                 Release Date:{' '}
               </Text>
               <Text variant="bodyMedium">

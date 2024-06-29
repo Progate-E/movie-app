@@ -69,7 +69,7 @@ export default function Detail({
       await AsyncStorage.setItem('@FavoriteList', JSON.stringify(favMovieList))
       setIsFavorite(true)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
@@ -90,7 +90,7 @@ export default function Detail({
         setIsFavorite(false)
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
@@ -113,9 +113,10 @@ export default function Detail({
             onFavoritePress={handleFavoritePress}
             height={250}
             certification={
-              movie.release_dates.results.filter(
-                (cert) => cert.iso_3166_1 === 'US',
-              )[0].release_dates[0].certification || 'NR'
+              movie.release_dates.results
+                .filter((rd) => rd.iso_3166_1 === 'US')[0]
+                ?.release_dates?.filter((rd) => rd.type === 3)[0]
+                ?.certification || 'NR'
             }
             landscape
             {...movie}

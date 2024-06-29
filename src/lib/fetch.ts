@@ -22,7 +22,7 @@ const fetchPopularMovies = async (page: number): Promise<Movies> => {
 }
 
 const fetchMovieDetail = async (movie_id: number): Promise<MovieDetail> => {
-  return fetchTMDB(`/movie/${movie_id}`)
+  return fetchTMDB(`/movie/${movie_id}?append_to_response=release_dates`)
 }
 
 const fetchAvailableMovieGenres = async (): Promise<Genres> => {

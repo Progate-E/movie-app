@@ -1,15 +1,15 @@
-KELOMPOK E:
-1. M HUDZAIFAH ASSYAHID
-2. MUTIA DONDA RIZKY
-3. TRI MURNIATI
-4. FATHAN ARSYADANI
-5. AGENG SAPUTRI
+<h1 align="center">
+KELOMPOK E
+</h1>
 
-AKTIF:
-1. FATHAN ARSYANDI (KETUA) - HOME 
-2. MUTIA DONDA RIZKY - SEARCH 
-3. TRI MURNIATI - FAVORIT
+# Member
 
-TIDAK AKTIF:
-1. M. HUDZAIFAH ASSYAID
-2. AGENG SAPUTRI
+- [ ] ~~M Hudzaifah Assyahid~~ (**inactive**)
+- [x] Mutia Donda Rizky (**search screen**)
+- [x] Tri Murniati (**favorites screen**)
+- [x] Fathan Arsyadani (**home, detail, and all movies screen**)
+- [ ] ~~Ageng Saputri~~ (**inactive**)
+
+# How to use
+
+Rename `example.env` to `.env` and enter your [`TMDB API Read Access Token`](https://www.themoviedb.org/settings/api).

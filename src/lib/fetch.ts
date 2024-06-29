@@ -5,7 +5,7 @@ async function fetchTMDB<T>(path: string, method = 'GET') {
     method: method,
     headers: {
       accept: 'application/json',
-      Authorization: `Bearer ${process.env.EXPO_PUBLIC_TMDB_API_KEY}`,
+      Authorization: `Bearer ${process.env.EXPO_PUBLIC_TMDB_API_READ_ACCESS_TOKEN}`,
     },
   }).then((res) => {
     if (!res.ok) {

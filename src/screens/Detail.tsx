@@ -7,7 +7,7 @@ import {
 } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React, { useCallback, useState } from 'react'
-import { FlatList, Pressable, ScrollView, StyleSheet, View } from 'react-native'
+import { FlatList, ScrollView, StyleSheet, View } from 'react-native'
 import { ActivityIndicator, Text } from 'react-native-paper'
 import MovieBanner from '../components/MovieBanner'
 import MovieList from '../components/MovieList'
@@ -128,38 +128,37 @@ export default function Detail({
               {movie.overview ||
                 "We don't have any overview information for this movie yet."}
             </Text>
-            <View style={styles.inlineData}>
+            <View>
               <Text variant="labelLarge" style={styles.fontExtraBold}>
-                Genres:{' '}
-              </Text>
-              {movie.genres.length > 0 ? (
-                movie.genres.map((genre, ix) => (
-                  <View key={genre.id} style={styles.inlineData}>
-                    <Pressable
+                {movie.genres.length > 1 ? 'Genres: ' : 'Genre: '}
+                {movie.genres.length === 0 && (
+                  <Text variant="bodyMedium">
+                    Genre information unavailable
+                  </Text>
+                )}
+                {movie.genres.map((genre, ix) => (
+                  <Text key={genre.id}>
+                    <Text
+                      variant="bodyMedium"
                       onPress={() => {
                         navigation.dispatch(
                           StackActions.push('AllMovies', {
+                            title: `${genre.name} Movies`,
                             fetchType: 'discover',
-                            title: genre.name,
                             params: {
                               with_genres: genre.id.toString(),
                             },
                           }),
                         )
                       }}
+                      style={styles.pressableText}
                     >
-                      <Text variant="bodyMedium" style={styles.pressableText}>
-                        {genre.name}
-                      </Text>
-                    </Pressable>
-                    <Text variant="bodyMedium">
-                      {ix < movie.genres.length - 1 ? ', ' : ''}
+                      {genre.name}
                     </Text>
-                  </View>
-                ))
-              ) : (
-                <Text>Unknown </Text>
-              )}
+                    {ix < movie.genres.length - 1 ? ', ' : ''}
+                  </Text>
+                ))}
+              </Text>
             </View>
             <View style={styles.inlineData}>
               <Text variant="labelLarge" style={styles.fontExtraBold}>
@@ -176,16 +175,20 @@ export default function Detail({
                   'Unknown'}
               </Text>
             </View>
-            <View style={styles.inlineData}>
+            <View>
               <Text variant="labelLarge" style={styles.fontExtraBold}>
                 {movie.spoken_languages.length > 1
                   ? 'Languages: '
                   : 'Language: '}
-              </Text>
-              <Text variant="bodyMedium">
+                {movie.spoken_languages.length === 0 && (
+                  <Text variant="bodyMedium">
+                    Language information unavailable
+                  </Text>
+                )}
                 {movie.spoken_languages.map((lang, ix) => (
-                  <View style={styles.inlineData} key={lang.iso_639_1}>
-                    <Pressable
+                  <Text key={lang.iso_639_1}>
+                    <Text
+                      variant="bodyMedium"
                       onPress={() => {
                         navigation.dispatch(
                           StackActions.push('AllMovies', {
@@ -197,15 +200,12 @@ export default function Detail({
                           }),
                         )
                       }}
+                      style={styles.pressableText}
                     >
-                      <Text variant="bodyMedium" style={styles.pressableText}>
-                        {lang.english_name}
-                      </Text>
-                    </Pressable>
-                    <Text variant="bodyMedium">
-                      {ix < movie.spoken_languages.length - 1 ? ', ' : ''}
+                      {lang.english_name}
                     </Text>
-                  </View>
+                    {ix < movie.spoken_languages.length - 1 ? ', ' : ''}
+                  </Text>
                 ))}
               </Text>
             </View>
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   castNotFoundContainer: {
-    height: 200,
+    height: 100,
     justifyContent: 'center',
   },
 })

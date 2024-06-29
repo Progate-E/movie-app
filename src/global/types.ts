@@ -15,6 +15,25 @@ interface Movie {
   vote_count: number
 }
 
+interface ReleaseDate {
+  certification: string
+  descriptors: []
+  iso_639_1: string
+  note: string
+  release_date: string
+  type: number
+}
+
+interface ReleaseDates {
+  iso_3166_1: string
+  release_dates: ReleaseDate[]
+}
+
+interface ReleaseDatesResponse {
+  id: number
+  results: ReleaseDates[]
+}
+
 interface Movies {
   page: number
   results: Movie[]
@@ -75,6 +94,7 @@ interface MovieDetail {
   video: boolean
   vote_average: number
   vote_count: number
+  release_dates: ReleaseDatesResponse // needed for certification
 }
 
 interface MovieParams {

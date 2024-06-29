@@ -11,6 +11,7 @@ interface MovieHeaderProps {
   backdrop_path: string
   vote_average: number
   release_date: string
+  certification: string
   status?: string
   landscape?: boolean
   isFavorite: boolean
@@ -18,7 +19,53 @@ interface MovieHeaderProps {
   height: number
 }
 
+const certificationColors = new Map([
+  [
+    'R',
+    {
+      backgroundColor: '#FF0000',
+      fontColor: '#FFFFFF',
+    },
+  ],
+  [
+    'PG',
+    {
+      backgroundColor: '#FFA500',
+      fontColor: '#000000',
+    },
+  ],
+  [
+    'NC-17',
+    {
+      backgroundColor: '#FF0000',
+      fontColor: '#FFFFFF',
+    },
+  ],
+  [
+    'G',
+    {
+      backgroundColor: '#008000',
+      fontColor: '#FFFFFF',
+    },
+  ],
+  [
+    'NR',
+    {
+      backgroundColor: '#000000',
+      fontColor: '#FFFFFF',
+    },
+  ],
+  [
+    'PG-13',
+    {
+      backgroundColor: '#FF0000',
+      fontColor: '#FFFFFF',
+    },
+  ],
+])
+
 export default function MovieBanner(props: MovieHeaderProps): ReactElement {
+  const color = certificationColors.get(props.certification)
   return (
     <View
       style={[
@@ -33,6 +80,20 @@ export default function MovieBanner(props: MovieHeaderProps): ReactElement {
           uri: `https://image.tmdb.org/t/p/w300${props.landscape ? props.backdrop_path : props.poster_path}`,
         }}
       >
+        <Text
+          variant="labelLarge"
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            backgroundColor: color?.backgroundColor,
+            padding: 10,
+            borderBottomLeftRadius: 10,
+            color: color?.fontColor,
+          }}
+        >
+          {props.certification}
+        </Text>
         <LinearGradient
           colors={['#00000000', 'rgba(0, 0, 0, 0.8)']}
           locations={[0.6, 0.8]}

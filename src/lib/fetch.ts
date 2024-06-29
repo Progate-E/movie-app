@@ -39,7 +39,7 @@ const fetchMoviesByGenre = async (
 
 const fetchMoviesByTitle = async (title: string): Promise<Movies> => {
   return fetchTMDB(
-    `/search/movie?${new URLSearchParams({ query: title }).toString()}`,
+    `/search/movie?${new URLSearchParams({ query: title, include_adult: 'true' }).toString()}`,
   )
 }
 

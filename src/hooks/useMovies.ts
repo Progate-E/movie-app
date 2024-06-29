@@ -1,5 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import {
+  fetchMovies,
   fetchNowPlayingMovies,
   fetchPopularMovies,
   fetchRecommendedMovies,
@@ -13,11 +14,18 @@ const fetchFuncMap = {
   nowPlaying: fetchNowPlayingMovies,
   topRated: fetchTopRatedMovies,
   upcoming: fetchUpcomingMovies,
+  discover: fetchMovies,
 }
 
 export type FetchType = keyof typeof fetchFuncMap
-const getFetchFunc = (fetchType: FetchType, movieId: number) => {
+const getFetchFunc = (
+  fetchType: FetchType,
+  movieId: number,
+  params: Record<string, string>,
+) => {
   switch (fetchType) {
+    case 'discover':
+      return (page: number) => fetchMovies(page, params)
     case 'recommended':
       return (page: number) => fetchRecommendedMovies(movieId, page)
     default:
@@ -25,8 +33,12 @@ const getFetchFunc = (fetchType: FetchType, movieId: number) => {
   }
 }
 
-export default function useMovies(fetchType: FetchType, movieId = 0) {
-  const fetchFunc = getFetchFunc(fetchType, movieId)
+export default function useMovies(
+  fetchType: FetchType,
+  movieId = 0,
+  params: Record<string, string> = {},
+) {
+  const fetchFunc = getFetchFunc(fetchType, movieId, params)
 
   const {
     data,
@@ -37,7 +49,7 @@ export default function useMovies(fetchType: FetchType, movieId = 0) {
     hasNextPage,
     fetchNextPage,
   } = useInfiniteQuery({
-    queryKey: [fetchType, movieId],
+    queryKey: [fetchType, movieId, params],
     queryFn: async ({ pageParam = 1 }) => {
       return fetchFunc(pageParam)
     },

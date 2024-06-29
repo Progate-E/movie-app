@@ -22,18 +22,23 @@ const fetchPopularMovies = async (page: number): Promise<Movies> => {
 }
 
 const fetchMovieDetail = async (movie_id: number): Promise<MovieDetail> => {
-  return fetchTMDB(`/movie/${movie_id}?append_to_response=release_dates`)
+  return fetchTMDB(`/movie/${movie_id}?append_to_response=release_dates,casts`)
 }
 
 const fetchAvailableMovieGenres = async (): Promise<Genres> => {
   return fetchTMDB('/genre/movie/list')
 }
 
-const fetchMoviesByGenre = async (
-  genres: number[] | number,
+const fetchMovies = async (
+  page: number,
+  params: Record<string, string>,
 ): Promise<Movies> => {
   return fetchTMDB(
-    `/discover/movie?${new URLSearchParams({ with_genres: genres.toString() }).toString()}`,
+    `/discover/movie?${new URLSearchParams({
+      ...params,
+      page: page.toString(),
+      include_adult: 'true',
+    }).toString()}`,
   )
 }
 
@@ -65,7 +70,7 @@ const fetchRecommendedMovies = async (
 export {
   fetchAvailableMovieGenres,
   fetchMovieDetail,
-  fetchMoviesByGenre,
+  fetchMovies,
   fetchMoviesByTitle,
   fetchNowPlayingMovies,
   fetchPopularMovies,

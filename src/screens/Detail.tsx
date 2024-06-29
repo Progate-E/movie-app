@@ -7,10 +7,12 @@ import {
 } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React, { useCallback, useState } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { FlatList, ScrollView, StyleSheet, View } from 'react-native'
 import { ActivityIndicator, Text } from 'react-native-paper'
 import MovieBanner from '../components/MovieBanner'
 import MovieList from '../components/MovieList'
+import PressableAvatar from '../components/PressableAvatar'
+import SectionLabel from '../components/SectionLabel'
 import { MovieDetail } from '../global/types'
 import { fetchMovieDetail, fetchRecommendedMovies } from '../lib/fetch'
 
@@ -126,6 +128,38 @@ export default function Detail({
               {movie.overview ||
                 "We don't have any overview information for this movie yet."}
             </Text>
+            <View>
+              <Text variant="labelLarge" style={styles.fontExtraBold}>
+                {movie.genres.length > 1 ? 'Genres: ' : 'Genre: '}
+                {movie.genres.length === 0 && (
+                  <Text variant="bodyMedium">
+                    Genre information unavailable
+                  </Text>
+                )}
+                {movie.genres.map((genre, ix) => (
+                  <Text key={genre.id}>
+                    <Text
+                      variant="bodyMedium"
+                      onPress={() => {
+                        navigation.dispatch(
+                          StackActions.push('AllMovies', {
+                            title: `${genre.name} Movies`,
+                            fetchType: 'discover',
+                            params: {
+                              with_genres: genre.id.toString(),
+                            },
+                          }),
+                        )
+                      }}
+                      style={styles.pressableText}
+                    >
+                      {genre.name}
+                    </Text>
+                    {ix < movie.genres.length - 1 ? ', ' : ''}
+                  </Text>
+                ))}
+              </Text>
+            </View>
             <View style={styles.inlineData}>
               <Text variant="labelLarge" style={styles.fontExtraBold}>
                 Release Date:{' '}
@@ -141,16 +175,38 @@ export default function Detail({
                   'Unknown'}
               </Text>
             </View>
-            <View style={styles.inlineData}>
+            <View>
               <Text variant="labelLarge" style={styles.fontExtraBold}>
                 {movie.spoken_languages.length > 1
                   ? 'Languages: '
                   : 'Language: '}
-              </Text>
-              <Text variant="bodyMedium">
-                {movie.spoken_languages
-                  .map((lang) => lang.english_name)
-                  .join(', ')}
+                {movie.spoken_languages.length === 0 && (
+                  <Text variant="bodyMedium">
+                    Language information unavailable
+                  </Text>
+                )}
+                {movie.spoken_languages.map((lang, ix) => (
+                  <Text key={lang.iso_639_1}>
+                    <Text
+                      variant="bodyMedium"
+                      onPress={() => {
+                        navigation.dispatch(
+                          StackActions.push('AllMovies', {
+                            title: `Movies in ${lang.english_name}`,
+                            fetchType: 'discover',
+                            params: {
+                              with_original_language: lang.iso_639_1,
+                            },
+                          }),
+                        )
+                      }}
+                      style={styles.pressableText}
+                    >
+                      {lang.english_name}
+                    </Text>
+                    {ix < movie.spoken_languages.length - 1 ? ', ' : ''}
+                  </Text>
+                ))}
               </Text>
             </View>
             <View style={styles.inlineData}>
@@ -161,6 +217,40 @@ export default function Detail({
                 {`${movie.vote_average.toPrecision(2)} (${movie.vote_count} ${movie.vote_count > 1 ? 'votes' : 'vote'})`}
               </Text>
             </View>
+          </View>
+          <View style={[styles.mb5, styles.ph10]}>
+            <SectionLabel label="Cast" />
+            <FlatList
+              data={movie.casts.cast.slice(0, 10)}
+              renderItem={({ item }) => (
+                <PressableAvatar
+                  name={item.name}
+                  image_url={item.profile_path}
+                  onPress={() => {
+                    navigation.dispatch(
+                      StackActions.push('AllMovies', {
+                        fetchType: 'discover',
+                        title: `Starred by ${item.name}`,
+                        params: {
+                          with_cast: item.id.toString(),
+                        },
+                      }),
+                    )
+                  }}
+                  width={75}
+                />
+              )}
+              contentContainerStyle={styles.listContainer}
+              showsHorizontalScrollIndicator={false}
+              ListEmptyComponent={() => (
+                <View style={styles.castNotFoundContainer}>
+                  <Text variant="headlineMedium" style={styles.fontExtraBold}>
+                    No cast information found
+                  </Text>
+                </View>
+              )}
+              horizontal
+            />
           </View>
           <MovieList
             title="You might also like"
@@ -200,5 +290,19 @@ const styles = StyleSheet.create({
   },
   textJustify: {
     textAlign: 'justify',
+  },
+  textCenter: {
+    textAlign: 'center',
+  },
+  pressableText: {
+    color: 'blue',
+  },
+  listContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+  castNotFoundContainer: {
+    height: 100,
+    justifyContent: 'center',
   },
 })

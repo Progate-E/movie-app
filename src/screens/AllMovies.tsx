@@ -14,16 +14,18 @@ import useMovies, { FetchType } from '../hooks/useMovies'
 interface AllMoviesProps {
   fetchType: FetchType
   movieId: number
+  params: Record<string, string>
 }
 
 export default function AllMovies({
   route,
 }: NativeStackScreenProps<ParamListBase>): ReactElement {
   const navigation = useNavigation()
-  const { movieId, fetchType } = route.params as AllMoviesProps
+  const { movieId, fetchType, params } = route.params as AllMoviesProps
   const { data, isFetching, fetchNextPage, error, isError } = useMovies(
     fetchType,
     movieId,
+    params,
   )
 
   return isError ? (

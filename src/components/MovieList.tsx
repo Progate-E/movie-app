@@ -5,6 +5,7 @@ import { FlatList, StyleSheet, View } from 'react-native'
 import { Button, Text } from 'react-native-paper'
 import { Movies } from '../global/types'
 import MovieCard from './MovieCard'
+import SectionLabel from './SectionLabel'
 
 interface MovieListProps {
   landscape?: boolean
@@ -31,12 +32,7 @@ export default function MovieList(props: MovieListProps): React.ReactElement {
   return (
     <View style={styles.container}>
       <View style={styles.listHeader}>
-        <View style={styles.listLabel}>
-          <View style={styles.thatThingOnTheLeft}></View>
-          <Text variant="headlineMedium" style={styles.fontExtraBold}>
-            {props.title}
-          </Text>
-        </View>
+        <SectionLabel label={props.title} />
         <Button
           icon="chevron-right"
           textColor="#007AFF"
@@ -51,38 +47,34 @@ export default function MovieList(props: MovieListProps): React.ReactElement {
       {isLoading ? (
         <Skeleton width="100%" height={200} animation="wave" />
       ) : (
-        movies.results &&
-        (movies.results.length > 0 ? (
-          <FlatList
-            data={movies.results}
-            renderItem={({ item }) => (
-              <MovieCard
-                landscape={props.landscape}
-                {...item}
-                onPress={() => {
-                  navigation.dispatch(
-                    StackActions.push('Detail', {
-                      id: item.id,
-                      title: item.title,
-                    }),
-                  )
-                }}
-              />
-            )}
-            keyExtractor={(item) => item.id.toString()}
-            showsHorizontalScrollIndicator={false}
-            horizontal
-          />
-        ) : (
-          <View style={styles.notFoundContainer}>
-            <Text
-              variant="headlineMedium"
-              style={[styles.textCenter, styles.fontExtraBold]}
-            >
-              No movies found
-            </Text>
-          </View>
-        ))
+        <FlatList
+          data={movies.results}
+          renderItem={({ item }) => (
+            <MovieCard
+              landscape={props.landscape}
+              {...item}
+              onPress={() => {
+                navigation.dispatch(
+                  StackActions.push('Detail', {
+                    id: item.id,
+                    title: item.title,
+                  }),
+                )
+              }}
+            />
+          )}
+          contentContainerStyle={styles.listContainer}
+          keyExtractor={(item) => item.id.toString()}
+          showsHorizontalScrollIndicator={false}
+          ListEmptyComponent={() => (
+            <View style={styles.notFoundContainer}>
+              <Text variant="headlineMedium" style={styles.fontExtraBold}>
+                No movies found
+              </Text>
+            </View>
+          )}
+          horizontal
+        />
       )}
     </View>
   )
@@ -96,17 +88,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  listLabel: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-  },
-  thatThingOnTheLeft: {
-    width: 20,
-    height: '100%',
-    borderRadius: 20,
-    backgroundColor: '#3495ff',
-    marginRight: 12,
-  },
   fontExtraBold: {
     fontWeight: '900',
   },
@@ -119,5 +100,9 @@ const styles = StyleSheet.create({
   },
   textCenter: {
     textAlign: 'center',
+  },
+  listContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
   },
 })

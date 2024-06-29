@@ -95,6 +95,7 @@ interface MovieDetail {
   vote_average: number
   vote_count: number
   release_dates: ReleaseDatesResponse // needed for certification
+  casts: Casts
 }
 
 interface MovieParams {
@@ -104,6 +105,25 @@ interface MovieParams {
 
 interface NavProps {
   title: string
+}
+
+interface Cast {
+  adult: boolean
+  gender: number
+  id: number
+  known_for_department: string
+  name: string
+  original_name: string
+  popularity: number
+  profile_path: string
+  cast_id: number
+  character: string
+  credit_id: string
+  order: number
+}
+
+interface Casts {
+  cast: Cast[]
 }
 
 export { Genre, Genres, Movie, MovieDetail, MovieParams, Movies, NavProps }

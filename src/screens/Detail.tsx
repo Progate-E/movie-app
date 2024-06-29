@@ -7,7 +7,7 @@ import {
 } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React, { useCallback, useState } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native'
 import { ActivityIndicator, Text } from 'react-native-paper'
 import MovieBanner from '../components/MovieBanner'
 import MovieList from '../components/MovieList'
@@ -126,6 +126,39 @@ export default function Detail({
               {movie.overview ||
                 "We don't have any overview information for this movie yet."}
             </Text>
+            <View style={styles.inlineData}>
+              <Text variant="labelLarge" style={styles.fontExtraBold}>
+                Genres:{' '}
+              </Text>
+              {movie.genres.length > 0 ? (
+                movie.genres.map((genre, ix) => (
+                  <View key={genre.id} style={styles.inlineData}>
+                    <Pressable
+                      onPress={() => {
+                        navigation.dispatch(
+                          StackActions.push('AllMovies', {
+                            fetchType: 'discover',
+                            title: genre.name,
+                            params: {
+                              with_genres: genre.id.toString(),
+                            },
+                          }),
+                        )
+                      }}
+                    >
+                      <Text variant="bodyMedium" style={{ color: 'blue' }}>
+                        {genre.name}
+                      </Text>
+                    </Pressable>
+                    <Text variant="bodyMedium">
+                      {ix < movie.genres.length - 1 ? ', ' : ''}
+                    </Text>
+                  </View>
+                ))
+              ) : (
+                <Text>Unknown </Text>
+              )}
+            </View>
             <View style={styles.inlineData}>
               <Text variant="labelLarge" style={styles.fontExtraBold}>
                 Release Date:{' '}

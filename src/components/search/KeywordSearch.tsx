@@ -59,7 +59,7 @@ export default function KeywordSearch(): React.ReactElement {
       </View>
       <ScrollView
         contentContainerStyle={{
-          paddingBottom: 525,
+          paddingBottom: 675,
         }}
         showsVerticalScrollIndicator={false}
       >

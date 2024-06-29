@@ -7,10 +7,12 @@ import {
 } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React, { useCallback, useState } from 'react'
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native'
+import { FlatList, Pressable, ScrollView, StyleSheet, View } from 'react-native'
 import { ActivityIndicator, Text } from 'react-native-paper'
 import MovieBanner from '../components/MovieBanner'
 import MovieList from '../components/MovieList'
+import PressableAvatar from '../components/PressableAvatar'
+import SectionLabel from '../components/SectionLabel'
 import { MovieDetail } from '../global/types'
 import { fetchMovieDetail, fetchRecommendedMovies } from '../lib/fetch'
 
@@ -146,7 +148,7 @@ export default function Detail({
                         )
                       }}
                     >
-                      <Text variant="bodyMedium" style={{ color: 'blue' }}>
+                      <Text variant="bodyMedium" style={styles.genreText}>
                         {genre.name}
                       </Text>
                     </Pressable>
@@ -195,6 +197,40 @@ export default function Detail({
               </Text>
             </View>
           </View>
+          <View style={[styles.mb5, styles.ph10]}>
+            <SectionLabel label="Cast" />
+            <FlatList
+              data={movie.casts.cast.slice(0, 10)}
+              renderItem={({ item }) => (
+                <PressableAvatar
+                  name={item.name}
+                  image_url={item.profile_path}
+                  onPress={() => {
+                    navigation.dispatch(
+                      StackActions.push('AllMovies', {
+                        fetchType: 'discover',
+                        title: `Starred by ${item.name}`,
+                        params: {
+                          with_cast: item.id.toString(),
+                        },
+                      }),
+                    )
+                  }}
+                  width={75}
+                />
+              )}
+              contentContainerStyle={styles.listContainer}
+              showsHorizontalScrollIndicator={false}
+              ListEmptyComponent={() => (
+                <View style={styles.castNotFoundContainer}>
+                  <Text variant="headlineMedium" style={styles.fontExtraBold}>
+                    No cast information found
+                  </Text>
+                </View>
+              )}
+              horizontal
+            />
+          </View>
           <MovieList
             title="You might also like"
             fetchFunc={async () => fetchRecommendedMovies(movie.id)}
@@ -233,5 +269,19 @@ const styles = StyleSheet.create({
   },
   textJustify: {
     textAlign: 'justify',
+  },
+  textCenter: {
+    textAlign: 'center',
+  },
+  genreText: {
+    color: 'blue',
+  },
+  listContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+  castNotFoundContainer: {
+    height: 200,
+    justifyContent: 'center',
   },
 })

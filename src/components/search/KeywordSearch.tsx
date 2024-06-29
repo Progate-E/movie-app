@@ -2,7 +2,7 @@ import { FontAwesome } from '@expo/vector-icons'
 import { StackActions, useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, TextInput, View } from 'react-native'
-import { Text, ActivityIndicator } from 'react-native-paper' // Import ActivityIndicator from react-native-paper
+import { ActivityIndicator, Text } from 'react-native-paper' // Import ActivityIndicator from react-native-paper
 import { Movie } from '../../global/types'
 import { fetchMoviesByTitle } from '../../lib/fetch'
 import MovieCard from '../MovieCard'
@@ -79,14 +79,7 @@ export default function KeywordSearch(): React.ReactElement {
             movies.map((movie) => (
               <MovieCard
                 key={movie.id}
-                id={movie.id}
-                title={movie.title}
-                poster_path={movie.poster_path}
-                popularity={movie.popularity}
-                vote_average={movie.vote_average}
-                overview={movie.overview}
-                release_date={movie.release_date}
-                backdrop_path={movie.backdrop_path}
+                {...movie}
                 onPress={() => handleMoviePress(movie)}
               />
             ))

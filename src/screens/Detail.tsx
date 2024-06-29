@@ -148,7 +148,7 @@ export default function Detail({
                         )
                       }}
                     >
-                      <Text variant="bodyMedium" style={styles.genreText}>
+                      <Text variant="bodyMedium" style={styles.pressableText}>
                         {genre.name}
                       </Text>
                     </Pressable>
@@ -183,9 +183,30 @@ export default function Detail({
                   : 'Language: '}
               </Text>
               <Text variant="bodyMedium">
-                {movie.spoken_languages
-                  .map((lang) => lang.english_name)
-                  .join(', ')}
+                {movie.spoken_languages.map((lang, ix) => (
+                  <View style={styles.inlineData} key={lang.iso_639_1}>
+                    <Pressable
+                      onPress={() => {
+                        navigation.dispatch(
+                          StackActions.push('AllMovies', {
+                            title: `Movies in ${lang.english_name}`,
+                            fetchType: 'discover',
+                            params: {
+                              with_original_language: lang.iso_639_1,
+                            },
+                          }),
+                        )
+                      }}
+                    >
+                      <Text variant="bodyMedium" style={styles.pressableText}>
+                        {lang.english_name}
+                      </Text>
+                    </Pressable>
+                    <Text variant="bodyMedium">
+                      {ix < movie.spoken_languages.length - 1 ? ', ' : ''}
+                    </Text>
+                  </View>
+                ))}
               </Text>
             </View>
             <View style={styles.inlineData}>
@@ -273,7 +294,7 @@ const styles = StyleSheet.create({
   textCenter: {
     textAlign: 'center',
   },
-  genreText: {
+  pressableText: {
     color: 'blue',
   },
   listContainer: {
